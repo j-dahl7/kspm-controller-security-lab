@@ -1,6 +1,6 @@
 # Defender for Cloud: controller-scoped KSPM evidence lab
 
-Status on October 7, 2026: deployed on AKS 1.35.8 in North Central US. Live comparisons in `results/` document pod replacement, scaling, a template change, and replacement after hardening. **No live KSPM finding has yet been observed.** The completed Kubernetes demonstration does not establish Defender finding stability or clearance.
+Status on October 7, 2026: tested on AKS 1.35.8 in North Central US. Live comparisons in `results/` document pod replacement, scaling, a template change, and replacement after hardening. **No live KSPM finding was observed during the bounded test.** The completed Kubernetes demonstration does not establish Defender finding stability or clearance. The experiment resource group and AKS-managed node group were both verified absent at approximately 21:37 UTC after manual cleanup.
 
 This package pairs a reproducible Kubernetes ownership experiment with collection tools for evaluating the October 5, 2026 change to workload-controller scope in Defender recommendations. Kubernetes behavior and Defender assessment behavior require separate evidence. Neither is an admission-control, image-CVE, or runtime-malware test.
 
@@ -194,7 +194,7 @@ October 7 local checks: 55 tests passed, and both Bicep templates compiled. The 
 
 The two-node system pool uses Linux `Standard_D4as_v4`. Compute, disks, load balancing/public IP, Defender coverage and any telemetry are billable. Query prices for your chosen region and agreement. This run has an approved USD 50 allowance, with same-day cleanup scheduled for 00:15 UTC on October 8 (19:15 America/Chicago on October 7). This is an operating allowance, not an Azure-enforced billing cap or a measured invoice.
 
-The Azure-hosted cleanup guard is deployed. A manual pre-deadline check read the owned group successfully and skipped deletion as expected. A tag alone does not enforce expiry. Verify the cleanup workflow and its scope before leaving any reproduction unattended.
+The Azure-hosted cleanup guard was deployed. A manual pre-deadline check read the owned group successfully and skipped deletion as expected. The completed run was cleaned up manually before expiry; the group, cluster, managed node group, and cleanup workflow are gone. A tag alone does not enforce expiry. Verify the cleanup workflow and its scope before leaving any reproduction unattended.
 
 Cleanup must bind the exact subscription, resource-group ID and experiment tag to the deployment receipt. Refuse an existing or mismatched group. Delete only this experiment's group, then verify both it and the AKS-managed node group are gone. Preserve existing subscription security plans and all other lab resources.
 

@@ -49,8 +49,10 @@
   "liveKspmAssessmentSchema": "not-observed",
   "defenderFindingStability": "not-observed",
   "defenderRemediation": "not-observed",
-  "cloudCleanupGuard": "deployed; pre-deadline run successfully skipped deletion",
-  "cleanupComplete": false,
+  "cloudCleanupGuard": "deployed; pre-deadline run successfully skipped deletion; removed with the experiment group",
+  "cleanupComplete": true,
+  "cleanupVerifiedDate": "2026-10-07",
+  "cleanupVerification": "Owned resource group and AKS-managed node group both absent; cleanup helper returned already-absent at approximately 21:37 UTC. Existing subscription plans retained.",
   "publicationReady": true,
   "publicationScope": "Source-backed explanation of the announced Defender change with measured Kubernetes demonstrations; no validation of Defender finding behavior."
 }
