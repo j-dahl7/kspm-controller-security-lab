@@ -43,26 +43,58 @@ def cli_prefix():
 def az_json(arguments):
     # Retry only known read operations. An uncertain write must never be repeated blindly.
     read_prefixes = [('account', 'show'), ('aks', 'show'), ('group', 'show'),
-                     ('group', 'exists'), ('resource', 'list'), ('role', 'definition', 'list')]
+                     ('group', 'exists'), ('resource', 'list'), ('role', 'definition', 'list'),
+                     ('deployment', 'group', 'show'), ('deployment', 'group', 'list')]
     retry_safe = any(tuple(arguments[:len(prefix)]) == prefix for prefix in read_prefixes)
-    if arguments and arguments[0] == 'rest' and '--method' in arguments:
-        method = arguments[arguments.index('--method') + 1].lower()
+
+    def single_option(*names):
+        # Repeated/ambiguous options must not classify an effective write as a read.
+        values = []
+        for index, argument in enumerate(arguments):
+            if argument in names:
+                values.append(arguments[index + 1] if index + 1 < len(arguments) else None)
+            else:
+                for name in names:
+                    if argument.startswith(name + '='):
+                        values.append(argument[len(name) + 1:])
+        return values[0] if len(values) == 1 else None
+
+    if arguments and arguments[0] == 'rest':
+        method = (single_option('--method', '-m') or '').lower()
         retry_safe = method == 'get'
-        if method == 'post' and '--url' in arguments:
-            target = urlsplit(arguments[arguments.index('--url') + 1])
+        url = single_option('--url', '-u')
+        if method == 'post' and url:
+            target = urlsplit(url)
             retry_safe = (target.scheme == 'https' and target.netloc.lower() == 'management.azure.com'
-                          and target.path.lower() == '/providers/microsoft.resourcegraph/resources')
-    for attempt in range(3 if retry_safe else 1):
-        result = subprocess.run(cli_prefix() + arguments + ['--output', 'json', '--only-show-errors'],
-                                capture_output=True, text=True, check=False)
-        if not result.returncode:
-            return json.loads(result.stdout) if result.stdout.strip() else None
-        transient = any(marker in result.stderr for marker in
-                        ['ConnectionResetError', 'Connection aborted', 'ReadTimeout', 'TooManyRequests'])
-        if retry_safe and transient and attempt < 2:
-            time.sleep(2 ** attempt)
+                          and target.path.lower() == '/providers/microsoft.resourcegraph/resources'
+                          and not target.fragment)
+    attempts = 5 if retry_safe else 1
+    command = cli_prefix() + arguments + ['--output', 'json', '--only-show-errors']
+    # At most 5 x 60 seconds plus 1+2+4+8 seconds of backoff for a read.
+    # Timeouts on writes have an uncertain outcome and are never retried.
+    for attempt in range(attempts):
+        timed_out = False
+        try:
+            result = subprocess.run(command, capture_output=True, text=True,
+                                    check=False, timeout=60)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            transient = True
+        else:
+            if not result.returncode:
+                return json.loads(result.stdout) if result.stdout.strip() else None
+            error = result.stderr.lower()
+            transient = any(marker in error for marker in
+                            ['connectionreseterror', 'connection reset', 'connection aborted',
+                             'readtimeout', 'connecttimeout', 'too many requests', 'toomanyrequests',
+                             'serviceunavailable', 'service unavailable', 'gatewaytimeout',
+                             'gateway timeout', 'badgateway', 'bad gateway'])
+        if retry_safe and transient and attempt + 1 < attempts:
+            time.sleep(min(2 ** attempt, 8))
             continue
         # Avoid echoing provider error bodies, account data, or credentials.
+        if timed_out:
+            raise RuntimeError('Azure CLI operation timed out; outcome is unconfirmed') from None
         raise RuntimeError(f'Azure CLI operation failed (exit {result.returncode}; transient={transient})')
 
 

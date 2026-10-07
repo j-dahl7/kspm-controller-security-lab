@@ -19,10 +19,17 @@ from collect_assessments import GUID, az_json, ensure_private_directory, cluster
 
 NAMESPACE = 'nls-kspm-controller-lab'
 DEPLOYMENT = 'kspm-scope-proof'
+DEPLOYMENTS = (DEPLOYMENT, 'kspm-scope-proof-v2')
 GROUP = 'nls-kspm-scope-20261007'
 CLUSTER = 'nls-kspm-scope'
 SELECTOR = 'app.kubernetes.io/name=' + DEPLOYMENT
 PHASES = ('baseline', 'scaled', 'rolled', 'remediated')
+
+
+def deployment_selector(deployment_name):
+    if deployment_name not in DEPLOYMENTS:
+        raise ValueError('Unexpected Deployment selection')
+    return 'app.kubernetes.io/name=' + deployment_name
 
 
 def validate_cluster(subscription, cluster_id, experiment, cluster):
@@ -65,17 +72,22 @@ def run_kubectl(prefix, arguments):
     return result.stdout
 
 
-def get_json(prefix, resource, name=None, selector=None):
+def get_json(prefix, resource, name=None, selector=None, deployment_name=DEPLOYMENT):
+    expected_selector = deployment_selector(deployment_name)
     if resource not in ('deployment', 'replicasets', 'pods', 'networkpolicies', 'resourcequotas'):
         raise ValueError('Resource type is outside the capture allowlist')
+    if resource == 'deployment' and name != deployment_name:
+        raise ValueError('Unexpected named Deployment')
+    if resource in ('replicasets', 'pods') and selector != expected_selector:
+        raise ValueError('Exact selected Deployment label is required')
     args = ['get', resource]
     if name:
-        if resource != 'deployment' or name != DEPLOYMENT:
+        if resource != 'deployment' or name != deployment_name:
             raise ValueError('Unexpected named resource')
         args.append(name)
     args += ['--namespace', NAMESPACE, '--output', 'json', '--request-timeout=60s']
     if selector:
-        if selector != SELECTOR or resource not in ('replicasets', 'pods'):
+        if selector != expected_selector or resource not in ('replicasets', 'pods'):
             raise ValueError('Unexpected label selection')
         args += ['--selector', selector]
     return json.loads(run_kubectl(prefix, args))
@@ -144,16 +156,18 @@ def controller_record(resource, kind):
             'conditions': conditions(status)}
 
 
-def snapshot(deployment, replicasets, pods, networkpolicies, quotas, phase):
+def snapshot(deployment, replicasets, pods, networkpolicies, quotas, phase,
+             deployment_name=DEPLOYMENT):
+    deployment_selector(deployment_name)
     if phase not in PHASES:
         raise ValueError('Unexpected capture phase')
     dep = controller_record(deployment, 'Deployment')
-    if dep['metadata']['name'] != DEPLOYMENT:
+    if dep['metadata']['name'] != deployment_name:
         raise ValueError('Unexpected Deployment')
     rs_items = list_items(replicasets, 'ReplicaSet')
     pod_items = list_items(pods, 'Pod')
     for item in rs_items:
-        controller_owner(item, 'Deployment', {dep['metadata']['uid']: DEPLOYMENT})
+        controller_owner(item, 'Deployment', {dep['metadata']['uid']: deployment_name})
     rs_owners = {item['metadata']['uid']: item['metadata']['name'] for item in rs_items}
     selected_pods = []
     for item in pod_items:
@@ -218,6 +232,7 @@ def main():
     parser.add_argument('--experiment-id', required=True)
     parser.add_argument('--kubeconfig', required=True, type=Path)
     parser.add_argument('--phase', required=True, choices=PHASES)
+    parser.add_argument('--deployment', default=DEPLOYMENT, choices=DEPLOYMENTS)
     args = parser.parse_args()
     if not GUID.fullmatch(args.subscription):
         parser.error('subscription must be a GUID')
@@ -240,12 +255,15 @@ def main():
         raise ValueError('Cannot identify exactly one selected Kubernetes API server')
     validate_server(server_lines[0], hosts,
                     insecure=len(server_lines) == 2 and server_lines[1].lower() != 'false')
-    deployment = get_json(prefix, 'deployment', name=DEPLOYMENT)
+    selected = args.deployment
+    selector = deployment_selector(selected)
+    deployment = get_json(prefix, 'deployment', name=selected, deployment_name=selected)
     result = snapshot(deployment,
-        get_json(prefix, 'replicasets', selector=SELECTOR),
-        get_json(prefix, 'pods', selector=SELECTOR),
-        get_json(prefix, 'networkpolicies'), get_json(prefix, 'resourcequotas'), args.phase)
-    latest = get_json(prefix, 'deployment', name=DEPLOYMENT)
+        get_json(prefix, 'replicasets', selector=selector, deployment_name=selected),
+        get_json(prefix, 'pods', selector=selector, deployment_name=selected),
+        get_json(prefix, 'networkpolicies'), get_json(prefix, 'resourcequotas'), args.phase,
+        deployment_name=selected)
+    latest = get_json(prefix, 'deployment', name=selected, deployment_name=selected)
     first_meta, last_meta = metadata(deployment, 'Deployment'), metadata(latest, 'Deployment')
     if (last_meta['uid'], last_meta.get('generation')) != (first_meta['uid'], first_meta.get('generation')):
         result['captureComplete'] = False
@@ -255,7 +273,7 @@ def main():
                   clusterResourceUid=cluster_uid(cluster), apiHostnameVerified=True)
     path, digest = save_capture(result, ensure_private_directory())
     print(json.dumps({'file': path.name, 'sha256': digest, 'phase': args.phase,
-                      'namespace': NAMESPACE, 'deployment': DEPLOYMENT,
+                      'namespace': NAMESPACE, 'deployment': selected,
                       'replicaSets': len(result['replicaSets']), 'pods': len(result['pods']),
                       'captureComplete': result['captureComplete'],
                       'missingEvidence': result['missingEvidence']}))

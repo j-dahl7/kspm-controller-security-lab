@@ -50,6 +50,77 @@ def fixtures():
 
 
 class KubernetesCaptureBoundaries(unittest.TestCase):
+    def test_v2_capture_requires_explicit_selection_and_matching_owner(self):
+        values = fixtures()
+        name = 'kspm-scope-proof-v2'
+        values[0]['metadata']['name'] = name
+        values[1]['items'][0]['metadata']['ownerReferences'][0]['name'] = name
+        result = capture.snapshot(*values, 'baseline', deployment_name=name)
+        self.assertTrue(result['captureComplete'])
+        self.assertEqual(result['deployment']['metadata']['name'], name)
+        with self.assertRaises(ValueError):
+            capture.snapshot(*values, 'baseline')
+        values[1]['items'][0]['metadata']['ownerReferences'][0]['name'] = capture.DEPLOYMENT
+        with self.assertRaises(ValueError):
+            capture.snapshot(*values, 'baseline', deployment_name=name)
+
+    def test_selected_deployment_binds_named_reads_and_label_selectors(self):
+        name = 'kspm-scope-proof-v2'
+        selector = capture.deployment_selector(name)
+        with patch.object(capture, 'run_kubectl', return_value='{}') as command:
+            capture.get_json(['kubectl'], 'deployment', name=name, deployment_name=name)
+            self.assertEqual(command.call_args.args[1][:3], ['get', 'deployment', name])
+            capture.get_json(['kubectl'], 'pods', selector=selector, deployment_name=name)
+            self.assertEqual(command.call_args.args[1][-2:], ['--selector', selector])
+        rejected = [dict(resource='deployment', name=capture.DEPLOYMENT, deployment_name=name),
+                    dict(resource='deployment', name='other', deployment_name='other'),
+                    dict(resource='pods', selector=capture.SELECTOR, deployment_name=name),
+                    dict(resource='pods', deployment_name=name),
+                    dict(resource='replicasets', selector=selector, deployment_name=capture.DEPLOYMENT)]
+        for arguments in rejected:
+            with self.subTest(arguments=arguments), patch.object(capture, 'run_kubectl') as command:
+                with self.assertRaises(ValueError):
+                    capture.get_json(['kubectl'], **arguments)
+                command.assert_not_called()
+
+    def test_v2_manifest_changes_only_workload_identity_labels(self):
+        root = SCRIPTS.parent / 'manifests'
+        expected = json.loads((root / 'baseline-deployment.json').read_text())
+        name = 'kspm-scope-proof-v2'
+        expected['metadata']['name'] = name
+        expected['metadata']['labels']['app.kubernetes.io/name'] = name
+        expected['spec']['selector']['matchLabels']['app.kubernetes.io/name'] = name
+        expected['spec']['template']['metadata']['labels']['app.kubernetes.io/name'] = name
+        self.assertEqual(json.loads((root / 'baseline-deployment-v2.json').read_text()), expected)
+
+    def test_main_v2_selection_reaches_both_reads_and_capture(self):
+        name = 'kspm-scope-proof-v2'
+        values = fixtures()
+        values[0]['metadata']['name'] = name
+        values[1]['items'][0]['metadata']['ownerReferences'][0]['name'] = name
+        cluster = {'id': CLUSTER_ID, 'fqdn': 'expected.azmk8s.io',
+                   'tags': {'experiment': 'kspm-123456', 'purpose': 'kspm-controller-scope'}}
+        with tempfile.TemporaryDirectory() as temp:
+            config = Path(temp) / 'config'
+            config.write_text('unused mocked configuration')
+            args = ['capture_kubernetes.py', '--subscription', SUB, '--cluster-id', CLUSTER_ID,
+                    '--experiment-id', 'kspm-123456', '--kubeconfig', str(config),
+                    '--phase', 'baseline', '--deployment', name]
+            with patch.object(sys, 'argv', args), \
+                 patch.object(capture, 'az_json', side_effect=[{'id': SUB}, cluster]), \
+                 patch.object(capture.shutil, 'which', return_value='kubectl.exe'), \
+                 patch.object(capture, 'run_kubectl', return_value='https://expected.azmk8s.io\nfalse'), \
+                 patch.object(capture, 'get_json', side_effect=[*values, values[0]]) as read, \
+                 patch.object(capture, 'ensure_private_directory', return_value=Path(temp)), \
+                 patch.object(capture, 'save_capture', return_value=(Path(temp) / 'capture.json', 'hash')) as save:
+                self.assertEqual(capture.main(), 0)
+                self.assertEqual(save.call_args.args[0]['deployment']['metadata']['name'], name)
+                self.assertEqual(read.call_args_list[0].kwargs, {'name': name, 'deployment_name': name})
+                self.assertEqual(read.call_args_list[-1].kwargs, {'name': name, 'deployment_name': name})
+                for call in read.call_args_list[1:3]:
+                    self.assertEqual(call.kwargs, {'selector': capture.deployment_selector(name),
+                                                  'deployment_name': name})
+
     def test_api_hostname_mismatch_and_insecure_transport_are_rejected(self):
         hosts = {'expected.azmk8s.io'}
         capture.validate_server('https://expected.azmk8s.io:443/', hosts)

@@ -52,6 +52,22 @@ class CaptureComparison(unittest.TestCase):
     def run_pair(self, before, after):
         return compare.compare(self.save('before', before), self.save('after', after))
 
+    def test_v2_comparison_accepts_known_name_but_refuses_cross_deployment(self):
+        def rename(value, name):
+            value['deployment']['metadata']['name'] = name
+            for replica_set in value['replicaSets']:
+                replica_set['metadata']['ownerReferences'][0]['name'] = name
+            return value
+        name = 'kspm-scope-proof-v2'
+        before = rename(example(), name)
+        after = rename(example('scaled', 1, count=3), name)
+        self.assertTrue(self.run_pair(before, after)['sameDeploymentObject'])
+        # Even a reused UID cannot justify comparing two distinct allowed names.
+        with self.assertRaisesRegex(ValueError, 'identity changed'):
+            self.run_pair(example(), after)
+        with self.assertRaisesRegex(ValueError, 'Unexpected Deployment name'):
+            self.run_pair(before, rename(example(minute=1), 'arbitrary-workload'))
+
     def test_valid_scaling_reports_counts_without_asserting_phase_outcome(self):
         result = self.run_pair(example(), example('scaled', 1, count=3))
         self.assertEqual(result['podUidCounts'], {'common': 1, 'new': 2, 'removed': 0})

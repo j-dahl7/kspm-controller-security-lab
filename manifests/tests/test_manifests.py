@@ -83,6 +83,7 @@ class ManifestSafetyTests(unittest.TestCase):
             "default-deny-networkpolicy.json": ("networking.k8s.io/v1", "NetworkPolicy"),
             "resource-quota.json": ("v1", "ResourceQuota"),
             "baseline-deployment.json": ("apps/v1", "Deployment"),
+            "baseline-deployment-v2.json": ("apps/v1", "Deployment"),
         }
         self.assertEqual(
             {path.name for path in FIXTURES.glob("*.json")},

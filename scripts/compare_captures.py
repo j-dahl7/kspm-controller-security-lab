@@ -13,7 +13,7 @@ from pathlib import Path
 import re
 import sys
 
-from capture_kubernetes import DEPLOYMENT, NAMESPACE, PHASES
+from capture_kubernetes import DEPLOYMENTS, NAMESPACE, PHASES
 
 
 def require(condition, message):
@@ -112,7 +112,7 @@ def validate_capture(value):
     utc_time(value.get('capturedUtc'))
     deployment = value.get('deployment')
     meta = object_metadata(deployment, 'Deployment')
-    require(meta['name'] == DEPLOYMENT, 'Unexpected Deployment name.')
+    require(meta['name'] in DEPLOYMENTS, 'Unexpected Deployment name.')
     desired, status = deployment.get('desiredReplicas'), deployment.get('status', {})
     require(integer(desired, 1) and isinstance(status, dict), 'Invalid Deployment replica state.')
     require(integer(meta.get('generation'), 1)
@@ -182,8 +182,9 @@ def compare(before_path, after_path):
     for field in ('subscriptionId', 'clusterId'):
         require(before[field].lower() == after[field].lower(), 'Capture cloud scope does not match.')
     require(before['experimentId'] == after['experimentId'], 'Capture experiment does not match.')
-    require(before['deployment']['metadata']['uid'] == after['deployment']['metadata']['uid'],
-            'Deployment UID changed; these are different controller objects.')
+    require(all(before['deployment']['metadata'][key] == after['deployment']['metadata'][key]
+                for key in ('uid', 'name', 'namespace')),
+            'Deployment identity changed; these are different controller objects.')
     require(before.get('clusterResourceUid') == after.get('clusterResourceUid'),
             'Cluster resource UID changed or is missing from one capture.')
     require(utc_time(before['capturedUtc']) < utc_time(after['capturedUtc']),

@@ -2,7 +2,7 @@ import importlib.util
 from pathlib import Path
 import unittest
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 spec = importlib.util.spec_from_file_location('collector', Path(__file__).resolve().parents[1] / 'scripts' / 'collect_assessments.py')
 collector = importlib.util.module_from_spec(spec)
@@ -74,6 +74,76 @@ class CollectorBoundaries(unittest.TestCase):
         empty = SimpleNamespace(returncode=0, stdout='', stderr='')
         with patch.object(collector, 'cli_prefix', return_value=['az']), patch.object(collector.subprocess, 'run', return_value=empty):
             self.assertIsNone(collector.az_json(['group', 'delete', '--name', 'example']))
+
+    def test_read_succeeds_on_fifth_attempt_with_capped_exponential_backoff(self):
+        failure = SimpleNamespace(returncode=1, stdout='', stderr='Connection reset by peer')
+        success = SimpleNamespace(returncode=0, stdout='{"ready": true}', stderr='')
+        with patch.object(collector, 'cli_prefix', return_value=['az']), \
+             patch.object(collector.subprocess, 'run', side_effect=[failure] * 4 + [success]) as run, \
+             patch.object(collector.time, 'sleep') as sleep:
+            self.assertEqual(collector.az_json(['deployment', 'group', 'show']), {'ready': True})
+            self.assertEqual(run.call_count, 5)
+            self.assertEqual(sleep.call_args_list, [call(1), call(2), call(4), call(8)])
+            self.assertTrue(all(item.kwargs['timeout'] == 60 for item in run.call_args_list))
+
+    def test_exhausted_read_stops_after_five_attempts_and_redacts_error(self):
+        failure = SimpleNamespace(returncode=1, stdout='', stderr='ReadTimeout private-token')
+        with patch.object(collector, 'cli_prefix', return_value=['az']), \
+             patch.object(collector.subprocess, 'run', return_value=failure) as run, \
+             patch.object(collector.time, 'sleep') as sleep:
+            with self.assertRaises(RuntimeError) as caught:
+                collector.az_json(['rest', '--method', 'get', '--url', BASE])
+            self.assertEqual(run.call_count, 5)
+            self.assertEqual(sleep.call_count, 4)
+            self.assertNotIn('private-token', str(caught.exception))
+
+    def test_command_timeout_retries_read_but_never_write(self):
+        for arguments, expected_attempts in [(['account', 'show'], 5),
+                                              (['group', 'delete', '--name', 'example'], 1)]:
+            timeout = collector.subprocess.TimeoutExpired('private command', 60, stderr='private-token')
+            with self.subTest(arguments=arguments), \
+                 patch.object(collector, 'cli_prefix', return_value=['az']), \
+                 patch.object(collector.subprocess, 'run', side_effect=timeout) as run, \
+                 patch.object(collector.time, 'sleep') as sleep:
+                with self.assertRaisesRegex(RuntimeError, 'outcome is unconfirmed') as caught:
+                    collector.az_json(arguments)
+                self.assertEqual(run.call_count, expected_attempts)
+                self.assertEqual(sleep.call_count, expected_attempts - 1)
+                self.assertNotIn('private', str(caught.exception))
+
+    def test_resource_graph_query_post_is_retryable_but_other_posts_are_not(self):
+        allowed = 'https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01'
+        urls = [(allowed, 5), (allowed.replace('resources?', 'resources/delete?'), 1),
+                (allowed.replace('management.azure.com', 'management.azure.com.evil.test'), 1)]
+        failed = SimpleNamespace(returncode=1, stdout='', stderr='TooManyRequests')
+        for url, attempts in urls:
+            with self.subTest(url=url), patch.object(collector, 'cli_prefix', return_value=['az']), \
+                 patch.object(collector.subprocess, 'run', return_value=failed) as run, \
+                 patch.object(collector.time, 'sleep'):
+                with self.assertRaises(RuntimeError):
+                    collector.az_json(['rest', '--method', 'post', '--url', url])
+                self.assertEqual(run.call_count, attempts)
+
+    def test_ambiguous_rest_method_is_not_retried(self):
+        failed = SimpleNamespace(returncode=1, stdout='', stderr='ConnectionResetError')
+        with patch.object(collector, 'cli_prefix', return_value=['az']), \
+             patch.object(collector.subprocess, 'run', return_value=failed) as run, \
+             patch.object(collector.time, 'sleep') as sleep:
+            with self.assertRaises(RuntimeError):
+                collector.az_json(['rest', '--method', 'get', '-m', 'delete', '--url', BASE])
+            self.assertEqual(run.call_count, 1)
+            sleep.assert_not_called()
+
+    def test_authorization_failures_are_not_retried(self):
+        failed = SimpleNamespace(returncode=1, stdout='', stderr='AuthorizationFailed private-token')
+        with patch.object(collector, 'cli_prefix', return_value=['az']), \
+             patch.object(collector.subprocess, 'run', return_value=failed) as run, \
+             patch.object(collector.time, 'sleep') as sleep:
+            with self.assertRaises(RuntimeError) as caught:
+                collector.az_json(['rest', '--method', 'get', '--url', BASE])
+            self.assertEqual(run.call_count, 1)
+            sleep.assert_not_called()
+            self.assertNotIn('private-token', str(caught.exception))
 
 
 if __name__ == '__main__':
