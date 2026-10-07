@@ -1,8 +1,8 @@
 # Defender for Cloud: controller-scoped KSPM evidence lab
 
-Status on October 7, 2026: deployed on AKS 1.35.8 in North Central US. The live pod-replacement comparison is published in `results/pod-replacement-comparison.json`. **No live KSPM finding has yet been observed.** The Kubernetes result is not a claim about Defender finding stability or remediation.
+Status on October 7, 2026: deployed on AKS 1.35.8 in North Central US. Live comparisons in `results/` document pod replacement, scaling, a template change, and replacement after hardening. **No live KSPM finding has yet been observed.** The completed Kubernetes demonstration does not establish Defender finding stability or clearance.
 
-This experiment tests the October 5, 2026 change from running-container scope to workload-controller scope for Kubernetes misconfiguration recommendations. It is separate from admission control, image CVEs, runtime malware, and Azure Policy workload-hardening assessments.
+This package pairs a reproducible Kubernetes ownership experiment with collection tools for evaluating the October 5, 2026 change to workload-controller scope in Defender recommendations. Kubernetes behavior and Defender assessment behavior require separate evidence. Neither is an admission-control, image-CVE, or runtime-malware test.
 
 ## Question
 
@@ -18,62 +18,83 @@ The release announcement establishes the scope change. It does not establish the
 - Entra authentication and Azure RBAC, local administrator accounts disabled; cluster-only administration for the current operator.
 - API access restricted to the operator's explicitly supplied egress CIDR. Defender uses its documented Trusted Access path.
 - No application Service or ingress. The namespace has restricted Pod Security admission and a default-deny NetworkPolicy.
-- One Deployment with two replicas, using the digest-pinned Kubernetes pause image. The only intentional security configuration weakness is a writable root filesystem. The test container does not run commands, use credentials, expose a port, or access host resources.
+- One Deployment starting with two replicas and scaled to four, using the digest-pinned Kubernetes pause image. The only intentional security configuration weakness is a writable root filesystem. The test container does not run injected commands, use credentials, expose a port, or access host resources.
 - No new subscription-wide Defender configuration, policy assignment, Sentinel workspace, Azure Policy add-on, or Helm sensor is required by this package. Existing Azure policies may provision components; inspect their results rather than disabling them.
 
 The selected SKU had available quota and no location restrictions in North Central US at deployment. Always query your own subscription's SKU restrictions, quotas and supported Kubernetes versions. Successful ARM validation does not guarantee regional control-plane capacity.
 
 ## What worked in the live test
 
-At 20:33:02 UTC the deployment had two ready pods. After deleting one UID-verified test pod, the 20:55:54 UTC capture had two ready pods: one original and one replacement. The Deployment object and active ReplicaSet were unchanged. Both pods still matched the original image and `readOnlyRootFilesystem: false` template. The timestamps delimit observations; the interval includes investigation time and is not replacement latency.
+All times below are **October 7, 2026 UTC**, shown to the second. Linked artifacts retain fractional-second timestamps and hashes of the underlying captures.
+
+| Experiment | Before → after capture | Observed Kubernetes result |
+|---|---|---|
+| [Initial pod replacement](results/pod-replacement-comparison.json) | 20:33:02 → 20:55:54 | Two ready replicas; one original pod retained, one replaced. Same Deployment and active ReplicaSet. The replacement still had `readOnlyRootFilesystem: false`. |
+| [Scale](results/scale-comparison.json) | 21:22:02 → 21:22:53 | Two → four ready replicas; two original pods retained, two new. Same Deployment and active ReplicaSet. All four matched the original writable-root template. |
+| [Template change](results/template-remediation-comparison.json) | 21:22:53 → 21:23:52 | Four → four ready replicas; four replacement pods and a new active ReplicaSet. Same Deployment UID. The template and all four pods had `readOnlyRootFilesystem: true`. |
+| [Replacement after hardening](results/hardened-replacement-comparison.json) | 21:23:52 → 21:24:43 | Four ready replicas; three original pods retained, one replaced. Same Deployment and active ReplicaSet. All four retained the read-only setting. |
+
+The requested image and observed image-ID set were unchanged in all four comparisons. The results establish controller identity, ready pause containers, and propagation of the selected configuration. We did **not** execute an application write-denial test. The timestamps delimit snapshots, not measured rollout or replacement latency, and do not establish continuous state between observations.
 
 The comparator verified the source hashes, ownership chain, readiness and scope before producing the public comparison. Raw identifiers and captures remain private. The comparison file contains no subscription ID, cluster endpoint, raw Kubernetes UID, or credential.
 
 Defender access was checked separately. The existing Defender security operator and its subscription role were verified. The new cluster initially had no Trusted Access binding, so we used Microsoft's documented manual binding path. Both the Azure binding and in-cluster read-only role binding were observed. That establishes access, not completion of a discovery scan.
 
-## Sequence and evidence gates
+## Two evidence tracks
 
-| Phase | Change | Evidence required before advancing |
+The Kubernetes demonstration can finish even when Defender has not returned a finding. Choose the track before changing the workload:
+
+| Capture phase | Kubernetes demonstration | Additional evidence for a Defender comparison |
 |---|---|---|
-| Preflight | None | Plan/discovery configuration, cluster version/SKU availability and permissions |
-| Baseline | Apply the four named resource manifests | Healthy workload, trusted discovery connection, and a matching live KSPM assessment |
-| Scale | Two replicas to four | New Kubernetes snapshot and a refreshed matching assessment |
-| Roll | Replace the pods without changing the security setting | New Pod UIDs and refreshed matching assessment; stable controller UID checked separately |
-| Remediate | Apply the single-field read-only patch | New Deployment generation and observed assessment status after reconciliation |
-| Cleanup | Delete the disposable group after saving evidence | Verify the group and managed node group are absent |
+| `baseline` | Two ready replicas with the original template | An actual matching KSPM assessment and its target fields |
+| `scaled` | Scale to four; compare Pod UIDs and the active ReplicaSet | A refreshed assessment demonstrably representing the scaled workload |
+| `remediated` | Patch the template to read-only; verify ready replacement pods | A subsequent service assessment; a Kubernetes setting is not Defender clearance |
+| `rolled` | Replace one pod after hardening; verify the setting persists | A subsequent assessment before asserting finding identity or scope stability |
 
-For the Defender comparison, do not run these phases back-to-back while waiting for the first finding. Agentless changes can take up to 24 hours to reach security graph surfaces; this is not a published KSPM recommendation SLA. A capture made after a mutation may still represent older state. Preserve both capture and assessment timestamps. End inconclusively at the time/budget boundary if necessary.
+For the **Kubernetes track**, use the commands below and capture each ready state. For the **Defender track**, stop at baseline until a matching assessment exists, then wait for refreshed evidence between interventions. Do not perform rapid changes and retrospectively assign delayed service records to each phase. Agentless changes can take up to 24 hours to reach security graph surfaces; that is not a published KSPM recommendation SLA.
 
-The separate Kubernetes pod-replacement control was run while the Defender baseline was pending. It preserved the two-replica workload and its security configuration. It does not substitute for a before/after Defender comparison.
+An empty Defender result is an observation limit, not healthy status. If the first finding never arrives within the time and budget, retain the completed Kubernetes comparisons and report the Defender experiment as unobserved. The earlier two-replica pod-replacement control in `results/` is separate from the reproduction sequence below.
 
 ## Reproduce the isolated environment
 
 Requires Python 3.12+, Azure CLI, Bicep, native `kubectl`, `kubelogin`, and permissions to create an AKS cluster and its scoped role assignments. The PowerShell example requires PowerShell 7.5+ so date strings remain strings. Set your own public operator IPv4 /32. Confirm the applicable Defender plan and `AgentlessDiscoveryForKubernetes` are already enabled; this lab never enables a subscription-wide plan for you.
 
 ```powershell
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+function Invoke-LabChecked {
+    param([Parameter(Mandatory)][scriptblock]$Command)
+    & $Command
+    if ($LASTEXITCODE -ne 0) { throw "Native command failed with exit code $LASTEXITCODE; stop here." }
+}
+# Put one native command in each checked block. Keep this PowerShell session
+# for the later workload and capture examples.
 $sub = '<subscription-guid>'
 $cidr = '<your-public-ipv4>/32'
-python scripts/prepare_run.py --subscription $sub --operator-cidr $cidr --location northcentralus --hours 4
-# Use the exact new filename printed by the command:
-$parameterFile = 'private/<timestamp>.parameters.local.json'
-$p = Get-Content $parameterFile -Raw | ConvertFrom-Json -DateKind String
+$prepared = (Invoke-LabChecked { python scripts/prepare_run.py --subscription $sub --operator-cidr $cidr --location northcentralus --hours 4 }) | ConvertFrom-Json
+$parameterFile = Join-Path 'private' $prepared.parametersFile
+$p = Get-Content -LiteralPath $parameterFile -Raw | ConvertFrom-Json -DateKind String
 $experiment = $p.parameters.experimentId.value
 $expiry = $p.parameters.expiresUtc.value
 $rg = 'nls-kspm-scope-20261007'
+$clusterName = 'nls-kspm-scope'
+$clusterId = "/subscriptions/$sub/resourceGroups/$rg/providers/Microsoft.ContainerService/managedClusters/$clusterName"
+$kubeconfig = Join-Path (Resolve-Path 'private').Path 'kubeconfig'
 
-if ((az group exists --name $rg --subscription $sub -o tsv) -ne 'false') {
-    throw 'Choose a clean subscription or remove only your previous verified lab; never overwrite an existing group.'
+if ((Invoke-LabChecked { az group exists --name $rg --subscription $sub -o tsv }) -ne 'false') {
+    throw 'The named group already exists; do not adopt or overwrite it.'
 }
-az group create --name $rg --location northcentralus --subscription $sub --tags "experiment=$experiment" 'purpose=kspm-controller-scope' "expiresUtc=$expiry"
-az bicep build --file infra/main.bicep --outfile infra/main.json
-az bicep build --file infra/cleanup.bicep --outfile infra/cleanup.json
-az deployment group create --name kspm-cleanup --resource-group $rg --subscription $sub --template-file infra/cleanup.json --parameters "experimentId=$experiment" "expiresUtc=$expiry" 'contributorRoleId=b24988ac-6180-42a0-ab88-20f7382dd24c'
-az deployment group create --name kspm-lab --resource-group $rg --subscription $sub --template-file infra/main.json --parameters "@$parameterFile"
-az aks get-credentials --name nls-kspm-scope --resource-group $rg --subscription $sub --file private/kubeconfig --format exec
-kubelogin convert-kubeconfig -l azurecli --kubeconfig private/kubeconfig
+if (Test-Path -LiteralPath $kubeconfig) { throw 'Use a new dedicated kubeconfig path.' }
+Invoke-LabChecked { az group create --name $rg --location northcentralus --subscription $sub --tags "experiment=$experiment" 'purpose=kspm-controller-scope' "expiresUtc=$expiry" }
+Invoke-LabChecked { az bicep build --file infra/main.bicep --outfile infra/main.json }
+Invoke-LabChecked { az bicep build --file infra/cleanup.bicep --outfile infra/cleanup.json }
+Invoke-LabChecked { az deployment group create --name kspm-cleanup --resource-group $rg --subscription $sub --template-file infra/cleanup.json --parameters "experimentId=$experiment" "expiresUtc=$expiry" 'contributorRoleId=b24988ac-6180-42a0-ab88-20f7382dd24c' }
+Invoke-LabChecked { az deployment group create --name kspm-lab --resource-group $rg --subscription $sub --template-file infra/main.json --parameters "@$parameterFile" }
+Invoke-LabChecked { az aks get-credentials --name $clusterName --resource-group $rg --subscription $sub --file $kubeconfig --format exec }
+Invoke-LabChecked { kubelogin convert-kubeconfig -l azurecli --kubeconfig $kubeconfig }
 ```
 
-Check each command's exit code before proceeding. The Azure-hosted cleanup workflow starts at the explicit UTC deadline. It checks group identity, experiment/purpose tags and deadline before deleting only its own group; it uses a managed identity scoped to that group. A successful deployment of the workflow does not establish a completed cleanup. Verify the final deletion of the cluster and managed node group.
+The wrapper stops on nonzero native exit codes rather than continuing after a failed deployment or capture. An interrupted setup is not permission to rerun over an existing group; reconcile the recorded resources first. The Azure-hosted cleanup workflow starts at the explicit UTC deadline and checks group identity and ownership before deletion. Verify the final deletion of the cluster and managed node group; workflow deployment alone is not completed cleanup.
 
 If automatic discovery access has not appeared, first verify the existing `DefenderCSPMSecurityOperator` and its assigned role, then follow the [documented Trusted Access recovery procedure](https://learn.microsoft.com/en-us/azure/defender-for-cloud/faq-defender-for-containers#what-do-i-do-if-i-have-locked-resource-groups-subscriptions-or-clusters). Bind only `Microsoft.Security/pricings/microsoft-defender-operator` to this lab cluster using the verified security-operator resource. Do not add the policy-writing or network-policy-writing roles for this posture experiment. The binding is not a scan-now command.
 
@@ -93,27 +114,71 @@ For each phase, capture Kubernetes Deployments, ReplicaSets, Pods, namespace pol
 
 Only derive a workload-owner ARG query after inspecting live assessment fields. Until then, `queries/discover-assessments.kql` is a schema-discovery query, not a finished controller resolver.
 
-```powershell
-$clusterId = "/subscriptions/$sub/resourceGroups/$rg/providers/Microsoft.ContainerService/managedClusters/nls-kspm-scope"
-python scripts/capture_kubernetes.py --subscription $sub --cluster-id $clusterId --experiment-id $experiment --kubeconfig private/kubeconfig --phase baseline
-python scripts/collect_assessments.py --subscription $sub --cluster-id $clusterId --phase baseline
-python scripts/collect_arg.py --subscription $sub --cluster-id $clusterId --phase baseline
-# After a separately captured intervention, use exact filenames:
-python scripts/compare_captures.py --before private/<before>-kubernetes.json --after private/<after>-kubernetes.json --out results/<new-comparison>.json
-```
-
 The Kubernetes collector exits 0 only for a complete ready snapshot; exit 2 preserves incomplete rollout evidence; exit 1 means identity or collection failure. It checks the selected API hostname against Azure, then validates controller owner references by UID. The comparison helper requires intact hash sidecars, complete ready captures, matching scope and increasing UTC times. Its public output reports only selected observations and comparison counts, never a Defender verdict.
 
-## Applying fixtures
+## Run the Kubernetes demonstration
 
-Use a dedicated kubeconfig with an explicitly verified server/cluster context. Apply these files by exact name, in order:
+Run from the repository root using the variables and checked-command function above. Use the dedicated kubeconfig created for this cluster, not the default context. The following creates only the four named fixtures; applying the entire directory would incorrectly treat a JSON Patch document as a Kubernetes resource.
 
-1. `manifests/namespace.json`
-2. `manifests/default-deny-networkpolicy.json`
-3. `manifests/resource-quota.json`
-4. `manifests/baseline-deployment.json`
+```powershell
+$namespace = 'nls-kspm-controller-lab'
+$deployment = 'kspm-scope-proof'
+$existingNamespace = Invoke-LabChecked { kubectl --kubeconfig $kubeconfig get namespace $namespace --ignore-not-found --output name }
+if ($existingNamespace) { throw 'The fixture namespace already exists; reconcile the previous run first.' }
+foreach ($manifest in @('namespace.json', 'default-deny-networkpolicy.json', 'resource-quota.json', 'baseline-deployment.json')) {
+    Invoke-LabChecked { kubectl --kubeconfig $kubeconfig apply --filename "manifests/$manifest" }
+}
+Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace rollout status "deployment/$deployment" --timeout=300s }
 
-Do not apply the entire directory. `harden-readonly.patch.json` is an RFC 6902 patch and must use `kubectl --kubeconfig private/kubeconfig patch deployment kspm-scope-proof --namespace nls-kspm-controller-lab --type=json --patch-file manifests/harden-readonly.patch.json`. The patch tests the expected container before changing the filesystem setting.
+function Save-LabSnapshot {
+    param([ValidateSet('baseline','scaled','remediated','rolled')][string]$Phase)
+    $receipt = (Invoke-LabChecked { python scripts/capture_kubernetes.py --subscription $sub --cluster-id $clusterId --experiment-id $experiment --kubeconfig $kubeconfig --phase $Phase }) | ConvertFrom-Json
+    Join-Path 'private' $receipt.file
+}
+$baseline = Save-LabSnapshot baseline
+$runStamp = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssfffffffZ')
+New-Item -ItemType Directory -Path 'results' -Force | Out-Null
+
+# Two replicas to four; the security setting stays unchanged.
+Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace scale "deployment/$deployment" --current-replicas=2 --replicas=4 }
+Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace rollout status "deployment/$deployment" --timeout=300s }
+$scaled = Save-LabSnapshot scaled
+Invoke-LabChecked { python scripts/compare_captures.py --before $baseline --after $scaled --out "results/$runStamp-scale.json" }
+
+# Change the owning template, then verify the resulting rollout.
+Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace patch deployment $deployment --type=json --patch-file manifests/harden-readonly.patch.json }
+Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace rollout status "deployment/$deployment" --timeout=300s }
+$remediated = Save-LabSnapshot remediated
+Invoke-LabChecked { python scripts/compare_captures.py --before $scaled --after $remediated --out "results/$runStamp-template-change.json" }
+```
+
+The RFC 6902 patch first tests that container zero is named `pause`, then sets only its `readOnlyRootFilesystem` field to `true`. Microsoft lists [immutable root filesystems](https://learn.microsoft.com/en-us/azure/defender-for-cloud/recommendations-reference-container#immutable-read-only-root-filesystem-should-be-enforced-for-containers) in its recommendation catalog. That reference does not prove this lab received a new controller-scoped assessment. Here, `remediated` is a phase label for a Kubernetes configuration change, not a Defender verdict.
+
+To check persistence after replacing one hardened pod, select it from the accepted capture and recheck its UID and the Deployment UID immediately before deletion:
+
+```powershell
+$proof = Get-Content -LiteralPath $remediated -Raw | ConvertFrom-Json -DateKind String
+$targetPod = $proof.pods[0]
+$currentPod = (Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace get pod $targetPod.metadata.name --output json }) | ConvertFrom-Json -DateKind String
+$currentDeployment = (Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace get deployment $deployment --output json }) | ConvertFrom-Json -DateKind String
+if ($currentPod.metadata.uid -ne $targetPod.metadata.uid -or $currentDeployment.metadata.uid -ne $proof.deployment.metadata.uid) {
+    throw 'The selected Kubernetes objects changed; capture and review the new state before proceeding.'
+}
+Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace delete pod $targetPod.metadata.name --wait=true --timeout=120s }
+Invoke-LabChecked { kubectl --kubeconfig $kubeconfig --namespace $namespace rollout status "deployment/$deployment" --timeout=300s }
+$replaced = Save-LabSnapshot rolled
+Invoke-LabChecked { python scripts/compare_captures.py --before $remediated --after $replaced --out "results/$runStamp-hardened-replacement.json" }
+```
+
+Run this isolated experiment without another operator changing its objects; the read-before-delete check is not an atomic UID precondition on deletion. If a capture exits 2, allow the workload to settle and repeat **only that capture**, then its comparison. Do not reapply the baseline manifest to “fix” a capture: that would reset replicas and the security setting. The comparison must show what was observed; no unchanged UID, replacement, or image invariant is assumed from the phase name.
+
+For the separate Defender track, run both read-only collectors at each chosen phase, with no intervening workload changes while waiting for the corresponding service evidence:
+
+```powershell
+$phase = 'baseline' # Use the actual observation phase.
+Invoke-LabChecked { python scripts/collect_assessments.py --subscription $sub --cluster-id $clusterId --phase $phase }
+Invoke-LabChecked { python scripts/collect_arg.py --subscription $sub --cluster-id $clusterId --phase $phase }
+```
 
 ## Validation
 

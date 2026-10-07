@@ -1,6 +1,6 @@
 {
   "asOfDate": "2026-10-07",
-  "status": "live-kubernetes-observed-defender-assessment-pending",
+  "status": "kubernetes-experiment-complete-defender-inconclusive",
   "primarySourceVerified": true,
   "defenderCspmEnabled": true,
   "defenderContainersEnabled": true,
@@ -27,21 +27,30 @@
   "bicepCompilation": "both templates passed",
   "liveCollections": {
     "ARM": {
+      "capturedUtc": "2026-10-07T21:26:08Z",
+      "sourceSHA256": "722f82064e4c28116737e90434616e0013987b01128cd7d4a3044b3fcd3c3a9f",
       "pages": 2,
       "assessments": 133,
       "matchingCandidates": 0
     },
     "ARG": {
+      "capturedUtc": "2026-10-07T21:26:02Z",
+      "sourceSHA256": "f1eea8f3803036fb1ac220a0f8fe6ac9bab92934697d7ab91731e58aa96d0a73",
       "pages": 1,
       "assessments": 141,
       "matchingCandidates": 0
     }
   },
   "kubernetesPodReplacement": "observed; see pod-replacement-comparison.json",
+  "kubernetesScale": "observed; see scale-comparison.json",
+  "kubernetesTemplateRemediation": "observed; see template-remediation-comparison.json",
+  "kubernetesHardenedReplacement": "observed; see hardened-replacement-comparison.json",
+  "applicationWriteDenialTest": "not-performed; pause workload configuration and readiness only",
   "liveKspmAssessmentSchema": "not-observed",
   "defenderFindingStability": "not-observed",
   "defenderRemediation": "not-observed",
   "cloudCleanupGuard": "deployed; pre-deadline run successfully skipped deletion",
   "cleanupComplete": false,
-  "publicationReady": false
+  "publicationReady": true,
+  "publicationScope": "Source-backed explanation of the announced Defender change with measured Kubernetes demonstrations; no validation of Defender finding behavior."
 }

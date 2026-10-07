@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0",
+  "before": {
+    "sourceSHA256": "169bcde3c7383eb201d94312e9913a5034633e00aff7c9136742bb5d95548319",
+    "capturedUtc": "2026-10-07T21:22:02.381601+00:00",
+    "phaseLabel": "baseline",
+    "desiredReplicas": 2,
+    "readyReplicas": 2,
+    "podCount": 2
+  },
+  "after": {
+    "sourceSHA256": "278014abe23317fc305ab1f807ae92a0dc4d09e0de954650cf43cb9d4f7d55f8",
+    "capturedUtc": "2026-10-07T21:22:53.745444+00:00",
+    "phaseLabel": "scaled",
+    "desiredReplicas": 4,
+    "readyReplicas": 4,
+    "podCount": 4
+  },
+  "sameDeploymentObject": true,
+  "clusterResourceUidCompared": true,
+  "podUidCounts": {
+    "common": 2,
+    "new": 2,
+    "removed": 0
+  },
+  "activeReplicaSets": {
+    "beforeCount": 1,
+    "afterCount": 1,
+    "uidSetChanged": false
+  },
+  "applicationContainers": [
+    {
+      "containerAlias": "container-1",
+      "before": {
+        "podCountWithContainer": 2,
+        "allPodsMatchTemplateImage": true,
+        "allPodsMatchTemplateRootFilesystem": true,
+        "presentInTemplate": true,
+        "readOnlyRootFilesystem": false,
+        "rootFilesystemFieldPresent": true
+      },
+      "after": {
+        "podCountWithContainer": 4,
+        "allPodsMatchTemplateImage": true,
+        "allPodsMatchTemplateRootFilesystem": true,
+        "presentInTemplate": true,
+        "readOnlyRootFilesystem": false,
+        "rootFilesystemFieldPresent": true
+      },
+      "templateImageUnchanged": true,
+      "observedImageIdSetUnchanged": true
+    }
+  ],
+  "scope": "Two observed Kubernetes snapshots; no Defender assessment, clearance, finding stability, or causal claim is established.",
+  "limitations": [
+    "Phase labels are supplied by the operator, not asserted outcomes.",
+    "Container aliases follow the sorted union of application-container names; init and ephemeral containers are not compared.",
+    "Image-ID comparisons are unavailable when either snapshot lacks an ID.",
+    "Matching sidecar hashes establish file consistency, not source authenticity.",
+    "Two snapshots do not establish continuous state between captures."
+  ]
+}
