@@ -1,0 +1,6 @@
+// READ-ONLY DISCOVERY. Run within the selected lab subscription.
+// Retrieve every result page; a truncated query is not an inventory.
+// Inspect returned properties before deriving controller-specific field paths.
+securityresources
+| where type =~ 'microsoft.security/assessments'
+| project id, name, type, subscriptionId, properties

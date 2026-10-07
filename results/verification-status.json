@@ -1,0 +1,47 @@
+{
+  "asOfDate": "2026-10-07",
+  "status": "live-kubernetes-observed-defender-assessment-pending",
+  "primarySourceVerified": true,
+  "defenderCspmEnabled": true,
+  "defenderContainersEnabled": true,
+  "agentlessKubernetesDiscoveryEnabled": true,
+  "region": "northcentralus",
+  "nodeSku": "Standard_D4as_v4",
+  "nodeCount": 2,
+  "kubernetesVersion": "1.35.8",
+  "osSku": "AzureLinux",
+  "approvedBudgetUsd": 50,
+  "cleanupScheduledUtc": "2026-10-08T00:15:00Z",
+  "budgetIsAzureEnforcedCap": false,
+  "invoiceMeasured": false,
+  "cloudDeployment": "succeeded",
+  "trustedAccessBinding": "succeeded; in-cluster role observed",
+  "collectorTestsPassed": 10,
+  "argTestsPassed": 10,
+  "fixtureTestsPassed": 8,
+  "parameterTestsPassed": 2,
+  "cleanupTestsPassed": 7,
+  "kubernetesCaptureTestsPassed": 11,
+  "comparisonTestsPassed": 7,
+  "totalLocalChecksPassed": 55,
+  "bicepCompilation": "both templates passed",
+  "liveCollections": {
+    "ARM": {
+      "pages": 2,
+      "assessments": 133,
+      "matchingCandidates": 0
+    },
+    "ARG": {
+      "pages": 1,
+      "assessments": 141,
+      "matchingCandidates": 0
+    }
+  },
+  "kubernetesPodReplacement": "observed; see pod-replacement-comparison.json",
+  "liveKspmAssessmentSchema": "not-observed",
+  "defenderFindingStability": "not-observed",
+  "defenderRemediation": "not-observed",
+  "cloudCleanupGuard": "deployed; pre-deadline run successfully skipped deletion",
+  "cleanupComplete": false,
+  "publicationReady": false
+}

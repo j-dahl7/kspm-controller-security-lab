@@ -1,0 +1,6 @@
+private/
+__pycache__/
+*.pyc
+infra/*.json
+*.parameters.local.json
+/article-draft.md
