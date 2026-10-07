@@ -113,7 +113,7 @@ Use a dedicated kubeconfig with an explicitly verified server/cluster context. A
 3. `manifests/resource-quota.json`
 4. `manifests/baseline-deployment.json`
 
-Do not apply the entire directory. `harden-readonly.patch.json` is an RFC 6902 patch and must use `kubectl patch deployment kspm-scope-proof --namespace nls-kspm-controller-lab --type=json --patch-file manifests/harden-readonly.patch.json`. The patch tests the expected container before changing the filesystem setting.
+Do not apply the entire directory. `harden-readonly.patch.json` is an RFC 6902 patch and must use `kubectl --kubeconfig private/kubeconfig patch deployment kspm-scope-proof --namespace nls-kspm-controller-lab --type=json --patch-file manifests/harden-readonly.patch.json`. The patch tests the expected container before changing the filesystem setting.
 
 ## Validation
 
