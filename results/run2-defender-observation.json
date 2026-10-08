@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "1.0",
+  "scope": "Defender for Cloud assessment observations for the second cluster instance of this lab. The Kubernetes workload was not changed after its baseline. No Defender finding is claimed; this record documents the observation window and what each check returned.",
+  "run": 2,
+  "region": "northcentralus",
+  "resourceGroup": "nls-kspm-scope-20261007",
+  "clusterName": "nls-kspm-scope",
+  "clusterInstance": "second instance under the same names; a different Azure resource UID from run 1, retained privately",
+  "timelineUtc": {
+    "clusterDeploymentCompleted": "2026-10-07T23:02:59Z",
+    "trustedAccessInClusterRoleBindingCreated": "2026-10-07T23:04:42Z",
+    "labNamespaceCreated": "2026-10-07T23:05:08Z",
+    "workloadBaselineCapture": "2026-10-07T23:05:37Z",
+    "defenderSensorComponentsCreatedInKubeSystem": "2026-10-07T23:30:01Z",
+    "scheduledCleanupTrigger": "2026-10-08T22:47:38Z"
+  },
+  "workload": {
+    "namespace": "nls-kspm-controller-lab",
+    "deployment": "kspm-scope-proof-v2",
+    "desiredReplicas": 2,
+    "readyReplicasAtBaseline": 2,
+    "readOnlyRootFilesystem": false,
+    "mutatedAfterBaseline": false,
+    "nameSuffixReason": "A distinct Deployment name keeps a cached record from the first cluster instance from being mistaken for fresh evidence."
+  },
+  "clusterSideDefenderComponents": {
+    "trustedAccessRoleBinding": "defender-cloudposture with Microsoft.Security/pricings/microsoft-defender-operator; provisioningState Succeeded",
+    "defenderSensorProfileEnabled": true,
+    "defenderSensorAutoProvisioned": "microsoft-defender-collector-ds, microsoft-defender-publisher-ds, microsoft-defender-collector-misc and defender-admission-controller appeared in kube-system at 2026-10-07T23:30:01Z without operator action",
+    "azurePolicyAddonInstalled": false,
+    "azurePolicyAddonNote": "addonProfiles was empty at every check; the policy-backed data plane recommendation path was not provisioned."
+  },
+  "subscriptionPlanSettingsObserved": {
+    "defenderCspm": {"tier": "Standard", "AgentlessDiscoveryForKubernetes": true, "ContainerRegistriesVulnerabilityAssessments": true},
+    "defenderForContainers": {"tier": "Standard", "ContainerSensor": true, "AgentlessDiscoveryForKubernetes": true, "ContainerRegistriesVulnerabilityAssessments": true}
+  },
+  "recommendationIdentity": {
+    "publishedJune1Title": "Containers should use a read-only root filesystem",
+    "publishedJune1TitlePresentInSubscriptionMetadata": false,
+    "subscriptionMetadataDefinitionsSearched": 1305,
+    "definitionsWithTheImmutableTitle": [
+      {"assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd", "displayName": "Immutable (read-only) root filesystem should be enforced for containers", "policyDefinitionId": "", "managementProvider": "MDC", "publicDate": "2026-04-01", "gaDate": "2026-07-01", "reading": "No policy definition and a GA date that matches the July 1 container-level GA; the most plausible agentless definition, unproven until a record arrives."},
+      {"assessmentName": "27d6f0e9-b4d5-468b-ae7e-03d5473fd864", "displayName": "Immutable (read-only) root filesystem should be enforced for containers", "policyDefinitionId": "df49d893-a74c-421d-bc95-c663042e5b80", "reading": "Azure Policy for Kubernetes path; requires the Azure Policy add-on, which this lab does not install."}
+    ],
+    "rule": "Attribute any future record by assessment key and policyDefinitionId, never by title alone."
+  },
+  "exemptionCheck": {
+    "subscriptionStandardAssignment": "Azure CSPM standard assigned with effect Audit; its standard lists 169 assessment keys including b4262879-2a96-468f-bacd-6ed4d567bbdd",
+    "exemptOrAttestAssignmentsAtSubscription": 0,
+    "exemptOrAttestAssignmentsAtManagementGroupAncestor": 0,
+    "legacyPolicyExemptionsAtSubscriptionGroupAndCluster": 0,
+    "coverageGap": "Native standard-assignment reads at resource-group and cluster scope failed and remain unverified."
+  },
+  "checks": [
+    {"capturedUtc": "2026-10-07T23:08:26Z", "source": "AzureResourceGraph", "assessments": 141, "candidates": 0, "assessmentsReferencingTheCluster": 0, "workloadAgeMinutes": 3},
+    {"capturedUtc": "2026-10-07T23:11:50Z", "source": "ARM assessments list", "assessments": 133, "candidates": 0, "assessmentsReferencingTheCluster": 0, "workloadAgeMinutes": 6},
+    {"capturedUtc": "2026-10-07T23:18:21Z", "source": "ARM assessments list", "assessments": 133, "candidates": 0, "assessmentsReferencingTheCluster": 0, "workloadAgeMinutes": 13},
+    {"capturedUtc": "2026-10-07T23:43:19Z", "source": "AzureResourceGraph", "assessments": 141, "candidates": 0, "assessmentsReferencingTheCluster": 0, "workloadAgeMinutes": 38},
+    {"capturedUtc": "2026-10-08T00:01:53Z", "source": "ARM assessments list", "assessments": 133, "candidates": 0, "assessmentsReferencingTheCluster": 0, "workloadAgeMinutes": 56},
+    {"capturedUtc": "2026-10-08T00:26:53Z", "source": "AzureResourceGraph", "assessments": 141, "candidates": 0, "assessmentsReferencingTheCluster": 0, "workloadAgeMinutes": 81},
+    {"capturedUtc": "2026-10-08T00:27:14Z", "source": "ARM assessments list", "assessments": 133, "candidates": 0, "assessmentsReferencingTheCluster": 0, "workloadAgeMinutes": 82}
+  ],
+  "surfaceDifference": "Resource Graph returns eight identity assessments (five service-principal, three user) that the subscription-scope ARM list omits; the 133 shared records matched on identity and status. No Kubernetes record was in either set.",
+  "interpretation": "Through the last check, no assessment of any kind referenced the cluster resource, including control-plane recommendations that need no workload discovery. The cluster had not entered the assessment pipeline, so the absence of a KSPM record is uninformative about the October 5 scope change. Microsoft documents that assessment scans can take up to 24 hours to appear.",
+  "whatWouldCount": [
+    "An Unhealthy assessment whose name is the resolved assessment key.",
+    "Assessed-resource fields that resolve to namespace nls-kspm-controller-lab, Deployment kspm-scope-proof-v2, in this cluster instance; record the exact JSON paths.",
+    "A second surface corroborating it, with timestamps that postdate the run 2 baseline.",
+    "The raw capture hashed and kept private; the published excerpt redacted.",
+    "A record naming pods instead of the controller is also a publishable result: the tenant had not received the scope change."
+  ],
+  "notClaimed": ["finding identity", "record cardinality for two replicas", "finding stability across replacement", "clearance after a template fix", "Secure Score effect"],
+  "sources": [
+    "https://learn.microsoft.com/en-us/azure/defender-for-cloud/release-notes#kspm-misconfiguration-recommendations-moving-to-controller-level-scope-ga",
+    "https://learn.microsoft.com/en-us/azure/defender-for-cloud/release-notes#container-level-misconfiguration-recommendations-for-kubernetes-preview",
+    "https://learn.microsoft.com/en-us/azure/defender-for-cloud/release-notes#new-container-security-capabilities-are-now-generally-available",
+    "https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-containers-troubleshoot",
+    "https://learn.microsoft.com/en-us/azure/defender-for-cloud/faq-defender-for-containers#whats-the-refresh-interval-for-agentless-discovery-of-kubernetes"
+  ]
+}

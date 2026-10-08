@@ -12,6 +12,24 @@ BASE = f'https://management.azure.com/subscriptions/{SUB}/providers/Microsoft.Se
 
 
 class CollectorBoundaries(unittest.TestCase):
+    def test_resource_type_counts_and_cluster_references_are_case_insensitive(self):
+        cluster = (f'/subscriptions/{SUB}/resourceGroups/rg/providers/'
+                   'Microsoft.ContainerService/managedClusters/c1')
+        records = [
+            {'properties': {'resourceDetails': {'Id': cluster.lower(),
+                                                 'ResourceType': 'microsoft.containerservice/managedclusters'}}},
+            {'properties': {'resourceDetails': {'Id': cluster + '/providers/Microsoft.Security/x',
+                                                 'ResourceType': 'K8s-container'}}},
+            {'properties': {'resourceDetails': {'Id': cluster + '-other', 'Source': 'Azure'}}},
+            {'properties': {}},
+            'not-a-record',
+        ]
+        self.assertEqual(collector.cluster_reference_count(records, cluster), 2)
+        self.assertEqual(collector.resource_type_counts(records),
+                         {'azure': 1, 'k8s-container': 1,
+                          'microsoft.containerservice/managedclusters': 1, 'unknown': 2})
+        self.assertEqual(collector.cluster_reference_count([], cluster), 0)
+
     def test_accepts_verified_arm_and_cli_uid_spellings(self):
         self.assertEqual(collector.cluster_uid({'resourceUid': 'example-uid'}), 'example-uid')
         self.assertEqual(collector.cluster_uid({'resourceUID': 'example-uid'}), 'example-uid')

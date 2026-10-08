@@ -121,6 +121,17 @@ class KubernetesCaptureBoundaries(unittest.TestCase):
                     self.assertEqual(call.kwargs, {'selector': capture.deployment_selector(name),
                                                   'deployment_name': name})
 
+    def test_cluster_security_state_reads_flags_without_assuming_them(self):
+        self.assertEqual(capture.cluster_security_state({}),
+                         {'azurePolicyAddonEnabled': None, 'defenderSensorProfileEnabled': None})
+        cluster = {'addonProfiles': {'azurepolicy': {'enabled': True}},
+                   'securityProfile': {'defender': {'securityMonitoring': {'enabled': False}}}}
+        self.assertEqual(capture.cluster_security_state(cluster),
+                         {'azurePolicyAddonEnabled': True, 'defenderSensorProfileEnabled': False})
+        self.assertIsNone(capture.cluster_security_state(
+            {'addonProfiles': {'AzurePolicy': {'enabled': 'yes'}}, 'securityProfile': None}
+        )['azurePolicyAddonEnabled'])
+
     def test_api_hostname_mismatch_and_insecure_transport_are_rejected(self):
         hosts = {'expected.azmk8s.io'}
         capture.validate_server('https://expected.azmk8s.io:443/', hosts)

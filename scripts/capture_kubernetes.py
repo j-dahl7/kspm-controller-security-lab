@@ -51,6 +51,21 @@ def validate_cluster(subscription, cluster_id, experiment, cluster):
     return hosts
 
 
+def cluster_security_state(cluster):
+    """Read-only summary of cluster-side Defender components; never evidence of an assessment."""
+    addons = cluster.get('addonProfiles') if isinstance(cluster.get('addonProfiles'), dict) else {}
+    policy = next((value for key, value in addons.items() if key.lower() == 'azurepolicy'), None)
+    security = cluster.get('securityProfile') if isinstance(cluster.get('securityProfile'), dict) else {}
+    defender = security.get('defender') if isinstance(security.get('defender'), dict) else {}
+    monitoring = defender.get('securityMonitoring')
+
+    def flag(value):
+        enabled = value.get('enabled') if isinstance(value, dict) else None
+        return enabled if isinstance(enabled, bool) else None
+
+    return {'azurePolicyAddonEnabled': flag(policy), 'defenderSensorProfileEnabled': flag(monitoring)}
+
+
 def validate_server(server, expected_hosts, insecure=False):
     parsed = urlsplit(server)
     if (insecure or parsed.scheme != 'https' or not parsed.hostname
@@ -270,7 +285,8 @@ def main():
         result['missingEvidence'].append('deployment-changed-during-capture')
     result.update(subscriptionId=args.subscription, clusterId=cluster['id'],
                   experimentId=args.experiment_id,
-                  clusterResourceUid=cluster_uid(cluster), apiHostnameVerified=True)
+                  clusterResourceUid=cluster_uid(cluster), apiHostnameVerified=True,
+                  clusterSecurityState=cluster_security_state(cluster))
     path, digest = save_capture(result, ensure_private_directory())
     print(json.dumps({'file': path.name, 'sha256': digest, 'phase': args.phase,
                       'namespace': NAMESPACE, 'deployment': selected,

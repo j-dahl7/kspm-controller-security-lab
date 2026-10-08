@@ -35,8 +35,10 @@ def main():
     parser.add_argument('--subscription', required=True)
     parser.add_argument('--operator-cidr', required=True)
     parser.add_argument('--location', default='northcentralus')
-    parser.add_argument('--hours', type=int, choices=range(1, 25), default=4,
-                        help='Explicit cleanup deadline in hours (1-24); budget separately.')
+    parser.add_argument('--hours', type=int, choices=range(1, 73), default=4,
+                        help='Explicit cleanup deadline in hours (1-72). Microsoft documents up to '
+                             '24 hours before assessments appear; a Defender track needs more than '
+                             'one such window. Budget separately.')
     args = parser.parse_args()
     if not GUID.fullmatch(args.subscription):
         parser.error('subscription must be a GUID')

@@ -185,8 +185,11 @@ def compare(before_path, after_path):
     require(all(before['deployment']['metadata'][key] == after['deployment']['metadata'][key]
                 for key in ('uid', 'name', 'namespace')),
             'Deployment identity changed; these are different controller objects.')
-    require(before.get('clusterResourceUid') == after.get('clusterResourceUid'),
-            'Cluster resource UID changed or is missing from one capture.')
+    for value in (before, after):
+        require(text_value(value.get('clusterResourceUid')),
+                'Cluster resource UID is missing; name reuse across cluster instances is not identity.')
+    require(before['clusterResourceUid'] == after['clusterResourceUid'],
+            'Cluster resource UID changed; these captures come from different cluster instances.')
     require(utc_time(before['capturedUtc']) < utc_time(after['capturedUtc']),
             'Before capture must precede after capture.')
     pod_ids = [{pod['metadata']['uid'] for pod in value['pods']} for value in (before, after)]
@@ -231,7 +234,9 @@ def compare(before_path, after_path):
                            'init and ephemeral containers are not compared.',
                            'Image-ID comparisons are unavailable when either snapshot lacks an ID.',
                            'Matching sidecar hashes establish file consistency, not source authenticity.',
-                           'Two snapshots do not establish continuous state between captures.']}
+                           'Two snapshots do not establish continuous state between captures.',
+                           'Both captures carried the same Azure cluster resource UID; reused '
+                           'resource names alone are never accepted as cluster identity.']}
 
 
 def main(argv=None):

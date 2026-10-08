@@ -159,6 +159,39 @@ def schema_paths(value, prefix=''):
     return result
 
 
+def resource_details(record):
+    details = (record.get('properties') or {}).get('resourceDetails') if isinstance(record, dict) else None
+    return details if isinstance(details, dict) else {}
+
+
+def resource_type_counts(records):
+    """Count assessed-resource types per capture so a missing entity class is visible, not silent."""
+    counts = {}
+    for record in records:
+        details = resource_details(record)
+        kind = (details.get('ResourceType') or details.get('resourceType')
+                or details.get('Source') or details.get('source') or 'unknown')
+        kind = str(kind).lower()
+        counts[kind] = counts.get(kind, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def cluster_reference_count(records, cluster_id):
+    """Assessments whose assessed resource is the cluster or lives under it, for any recommendation.
+
+    Zero means Defender has not assessed the cluster resource at all yet; that makes an
+    absent KSPM record uninformative rather than a KSPM-specific negative.
+    """
+    needle = cluster_id.lower()
+    total = 0
+    for record in records:
+        details = resource_details(record)
+        target = str(details.get('Id') or details.get('id') or '').lower()
+        if target == needle or target.startswith(needle + '/'):
+            total += 1
+    return total
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--subscription', required=True)
@@ -187,6 +220,8 @@ def main():
                'namespace': args.namespace, 'completePagination': True,
                'pageCount': len(pages), 'assessmentCount': len(records),
                'candidateCount': len(candidates), 'candidateSelection': 'broad text; manual review required',
+               'resourceTypeCounts': resource_type_counts(records),
+               'clusterReferencedAssessments': cluster_reference_count(records, args.cluster_id),
                'pages': pages, 'candidates': candidates,
                'candidateSchemaPaths': sorted({p for r in candidates for p in schema_paths(r)})}
     folder = ensure_private_directory()
@@ -200,6 +235,7 @@ def main():
         stream.write(digest + '\n')
     print(json.dumps({'file': path.name, 'phase': args.phase, 'pages': len(pages),
                       'assessments': len(records), 'candidatesRequireReview': len(candidates),
+                      'clusterReferencedAssessments': payload['clusterReferencedAssessments'],
                       'sha256': digest}))
 
 

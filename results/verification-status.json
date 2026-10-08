@@ -1,58 +1,66 @@
 {
-  "asOfDate": "2026-10-07",
-  "status": "kubernetes-experiment-complete-defender-inconclusive",
+  "asOfUtc": "2026-10-08T00:30:00Z",
+  "status": "kubernetes-demonstration-complete-defender-demonstration-pending",
+  "kubernetesExplainerReady": true,
+  "defenderDemonstrationReady": false,
+  "defenderDemonstrationBlockedOn": "An observed Defender assessment for the frozen run 2 workload; none of 18 captures across both runs referenced the cluster resource at all.",
   "primarySourceVerified": true,
+  "primarySources": {
+    "october5ControllerScopeGa": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/release-notes#kspm-misconfiguration-recommendations-moving-to-controller-level-scope-ga",
+    "june1ContainerLevelPreview": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/release-notes#container-level-misconfiguration-recommendations-for-kubernetes-preview",
+    "july1ContainerLevelGa": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/release-notes#new-container-security-capabilities-are-now-generally-available",
+    "assessmentWaitGuidance": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-containers-troubleshoot"
+  },
   "defenderCspmEnabled": true,
   "defenderContainersEnabled": true,
   "agentlessKubernetesDiscoveryEnabled": true,
+  "containerSensorAutoProvisioningEnabled": true,
+  "azurePolicyAddonInstalled": false,
   "region": "northcentralus",
   "nodeSku": "Standard_D4as_v4",
   "nodeCount": 2,
   "kubernetesVersion": "1.35.8",
   "osSku": "AzureLinux",
-  "approvedBudgetUsd": 50,
-  "cleanupScheduledUtc": "2026-10-08T00:15:00Z",
+  "cumulativeApprovedBudgetUsd": 50,
   "budgetIsAzureEnforcedCap": false,
   "invoiceMeasured": false,
-  "cloudDeployment": "succeeded",
-  "trustedAccessBinding": "succeeded; in-cluster role observed",
-  "collectorTestsPassed": 10,
-  "argTestsPassed": 10,
-  "fixtureTestsPassed": 8,
-  "parameterTestsPassed": 2,
-  "cleanupTestsPassed": 7,
-  "kubernetesCaptureTestsPassed": 11,
-  "comparisonTestsPassed": 7,
-  "totalLocalChecksPassed": 55,
-  "bicepCompilation": "both templates passed",
-  "liveCollections": {
-    "ARM": {
-      "capturedUtc": "2026-10-07T21:26:08Z",
-      "sourceSHA256": "722f82064e4c28116737e90434616e0013987b01128cd7d4a3044b3fcd3c3a9f",
-      "pages": 2,
-      "assessments": 133,
-      "matchingCandidates": 0
-    },
-    "ARG": {
-      "capturedUtc": "2026-10-07T21:26:02Z",
-      "sourceSHA256": "f1eea8f3803036fb1ac220a0f8fe6ac9bab92934697d7ab91731e58aa96d0a73",
-      "pages": 1,
-      "assessments": 141,
-      "matchingCandidates": 0
-    }
+  "localChecks": {
+    "unitTests": 69,
+    "unitTestBreakdown": {"collector": 17, "resourceGraph": 10, "kubernetesCapture": 16, "comparison": 9, "manifests": 8, "cleanup": 7, "parameters": 2},
+    "bicep": "both templates compiled",
+    "credentialScan": "gitleaks dir and git history; no findings"
   },
-  "kubernetesPodReplacement": "observed; see pod-replacement-comparison.json",
-  "kubernetesScale": "observed; see scale-comparison.json",
-  "kubernetesTemplateRemediation": "observed; see template-remediation-comparison.json",
-  "kubernetesHardenedReplacement": "observed; see hardened-replacement-comparison.json",
+  "runs": [
+    {
+      "run": 1,
+      "workload": "kspm-scope-proof",
+      "workloadCreatedUtc": "2026-10-07T20:31:46Z",
+      "kubernetesComparisons": ["pod-replacement-comparison.json", "scale-comparison.json", "template-remediation-comparison.json", "hardened-replacement-comparison.json"],
+      "kubernetesResult": "observed: replacement preserved the writable-root setting; scaling preserved it; the template change propagated read-only to four replacement pods; a later replacement inherited read-only",
+      "defenderChecks": {"first": "2026-10-07T20:36:45Z", "last": "2026-10-07T21:26:08Z", "count": 8, "candidates": 0, "assessmentsReferencingTheCluster": 0},
+      "workloadLifetimeMinutes": 65,
+      "defenderResult": "uninformative: the workload was changed and the cluster deleted within about an hour, far short of Microsoft's documented up-to-24-hour wait for assessments",
+      "cleanup": "resource group and AKS-managed node group verified absent at approximately 2026-10-07T21:37Z",
+      "designError": "mutated and deleted the workload before any Defender baseline existed"
+    },
+    {
+      "run": 2,
+      "workload": "kspm-scope-proof-v2",
+      "clusterDeploymentCompletedUtc": "2026-10-07T23:02:59Z",
+      "workloadBaselineUtc": "2026-10-07T23:05:37Z",
+      "workloadMutatedAfterBaseline": false,
+      "defenderSensorAutoProvisionedUtc": "2026-10-07T23:30:01Z",
+      "defenderChecks": {"first": "2026-10-07T23:08:26Z", "last": "2026-10-08T00:27:14Z", "count": 7, "candidates": 0, "assessmentsReferencingTheCluster": 0},
+      "defenderResult": "pending: no assessment of any kind referenced the cluster through the last check; see run2-defender-observation.json",
+      "cleanupDeadlineUtc": "2026-10-08T22:47:38Z",
+      "cleanupComplete": false
+    }
+  ],
   "applicationWriteDenialTest": "not-performed; pause workload configuration and readiness only",
   "liveKspmAssessmentSchema": "not-observed",
+  "defenderFindingIdentity": "not-observed",
   "defenderFindingStability": "not-observed",
   "defenderRemediation": "not-observed",
-  "cloudCleanupGuard": "deployed; pre-deadline run successfully skipped deletion; removed with the experiment group",
-  "cleanupComplete": true,
-  "cleanupVerifiedDate": "2026-10-07",
-  "cleanupVerification": "Owned resource group and AKS-managed node group both absent; cleanup helper returned already-absent at approximately 21:37 UTC. Existing subscription plans retained.",
-  "publicationReady": true,
-  "publicationScope": "Source-backed explanation of the announced Defender change with measured Kubernetes demonstrations; no validation of Defender finding behavior."
+  "secureScoreEffect": "not-observed",
+  "publicationScope": "Source-backed explanation of the announced Defender change plus measured Kubernetes demonstrations. The Defender half is explicitly pending and labeled as such in the published article and lab page."
 }

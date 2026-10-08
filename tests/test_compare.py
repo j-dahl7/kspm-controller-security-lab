@@ -117,6 +117,16 @@ class CaptureComparison(unittest.TestCase):
             with self.subTest(index=index), self.assertRaises(ValueError):
                 self.run_pair(example(), after)
 
+    def test_two_captures_without_cluster_uid_are_refused(self):
+        for mutate in (lambda x: x.pop('clusterResourceUid'),
+                       lambda x: x.update(clusterResourceUid=None),
+                       lambda x: x.update(clusterResourceUid='')):
+            before, after = example(), example(minute=1)
+            mutate(before)
+            mutate(after)
+            with self.subTest(mutate=mutate), self.assertRaisesRegex(ValueError, 'missing'):
+                self.run_pair(before, after)
+
     def test_false_complete_flag_cannot_hide_not_ready_or_broken_owner(self):
         changes = [lambda x: x['pods'][0]['conditions'][0].update(status='False'),
                    lambda x: x['pods'][0]['metadata']['ownerReferences'][0].update(uid='foreign'),

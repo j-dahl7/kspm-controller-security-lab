@@ -11,7 +11,8 @@ import re
 import sys
 import tempfile
 
-from collect_assessments import GUID, az_json, ensure_private_directory, schema_paths
+from collect_assessments import (GUID, az_json, cluster_reference_count, ensure_private_directory,
+                                 resource_type_counts, schema_paths)
 
 ARG_URL = 'https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01'
 QUERY = ('securityresources '
@@ -118,6 +119,8 @@ def main():
         'namespace': args.namespace, 'query': QUERY, 'completePagination': True,
         'pageCount': len(pages), 'assessmentCount': len(records),
         'candidateCount': len(candidates), 'candidateSelection': 'broad text; manual review required',
+        'resourceTypeCounts': resource_type_counts(records),
+        'clusterReferencedAssessments': cluster_reference_count(records, args.cluster_id),
         'pages': pages, 'candidates': candidates,
         'candidateSchemaPaths': sorted({p for row in candidates for p in schema_paths(row)}),
     }
@@ -131,6 +134,7 @@ def main():
         stream.write(digest + '\n')
     print(json.dumps({'file': path.name, 'phase': args.phase, 'pages': len(pages),
                       'assessments': len(records), 'candidatesRequireReview': len(candidates),
+                      'clusterReferencedAssessments': payload['clusterReferencedAssessments'],
                       'sha256': digest}))
 
 
