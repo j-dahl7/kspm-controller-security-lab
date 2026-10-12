@@ -1,0 +1,473 @@
+{
+  "schemaVersion": "1.0",
+  "recordedUtc": "2026-10-09T17:48:51.150454+00:00",
+  "asOfUtc": "2026-10-09T17:49:16.061Z",
+  "evidenceClass": "product-observed-with-limits",
+  "summary": "After the read-only template rollout, the trusted-registry recommendation references a verified post-rollout pod under its unchanged assessment and resource identity. The root-filesystem finding is absent from complete ARM and ARG exports, its previous address returns 404, and the portal no longer lists it. No explicit Healthy or resolved root-filesystem record was returned.",
+  "recommendations": {
+    "rootFilesystemAssessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+    "trustedRegistriesAssessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0"
+  },
+  "observations": [
+    {
+      "label": "baselineArm",
+      "sourceSHA256": "9254eff97747242a2708fc22c156fd619a4465e3eb40c47b88d7fba7c6297ca7",
+      "capturedUtc": "2026-10-08T13:20:43.481407+00:00",
+      "surface": "ARM assessments list",
+      "completePagination": true,
+      "pageCount": 2,
+      "totalReturnedAssessments": 145,
+      "rootFilesystemMatchingRecords": 1,
+      "registryMatchingRecords": 1,
+      "registryFinding": {
+        "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "displayName": "Container images should be deployed from trusted registries only",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+          "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "baseline-pod-A"
+        }
+      },
+      "rootFilesystemFinding": {
+        "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+        "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+          "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "baseline-pod-A"
+        }
+      }
+    },
+    {
+      "label": "baselineArg",
+      "sourceSHA256": "ca4e9df90da38e8b743fb536a0b50127ab3196ac0f2d97d8c9bb5cd7bf2e74fe",
+      "capturedUtc": "2026-10-08T13:20:38.439800+00:00",
+      "surface": "Azure Resource Graph",
+      "completePagination": true,
+      "pageCount": 1,
+      "totalReturnedAssessments": 153,
+      "rootFilesystemMatchingRecords": 1,
+      "registryMatchingRecords": 1,
+      "registryFinding": {
+        "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "displayName": "Container images should be deployed from trusted registries only",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+          "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "baseline-pod-A"
+        },
+        "metadata": {
+          "severity": "High",
+          "managementProvider": "MDC",
+          "policyDefinitionId": ""
+        },
+        "contextualRiskLevel": "Low"
+      },
+      "rootFilesystemFinding": {
+        "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+        "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+          "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "baseline-pod-A"
+        },
+        "metadata": {
+          "severity": "Medium",
+          "managementProvider": "MDC",
+          "policyDefinitionId": ""
+        },
+        "contextualRiskLevel": "Low"
+      }
+    },
+    {
+      "label": "lastPositiveRootArm",
+      "sourceSHA256": "c41ea89e3ba24b6dff55fc8e78a78f287b776e6ba584c03e96fa1c548f1179b1",
+      "capturedUtc": "2026-10-09T14:21:28.682306+00:00",
+      "surface": "ARM assessments list",
+      "completePagination": true,
+      "pageCount": 3,
+      "totalReturnedAssessments": 172,
+      "rootFilesystemMatchingRecords": 1,
+      "registryMatchingRecords": 1,
+      "registryFinding": {
+        "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "displayName": "Container images should be deployed from trusted registries only",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+          "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "baseline-pod-A"
+        }
+      },
+      "rootFilesystemFinding": {
+        "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+        "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+          "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "baseline-pod-A"
+        }
+      }
+    },
+    {
+      "label": "currentArm",
+      "sourceSHA256": "d29383ff7ad17652f58c8eba49d4fd29113d0948c58edf86ce8d91072ea7b949",
+      "capturedUtc": "2026-10-09T17:43:21.773633+00:00",
+      "surface": "ARM assessments list",
+      "completePagination": true,
+      "pageCount": 3,
+      "totalReturnedAssessments": 171,
+      "rootFilesystemMatchingRecords": 0,
+      "registryMatchingRecords": 1,
+      "registryFinding": {
+        "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "displayName": "Container images should be deployed from trusted registries only",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+          "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "post-rollout-pod-A"
+        }
+      },
+      "rootFilesystemFinding": null
+    },
+    {
+      "label": "currentArg",
+      "sourceSHA256": "3bfd70041b8a18c032e0bed343551ea46501628be7f9477809aa5b905a70c4e8",
+      "capturedUtc": "2026-10-09T17:43:11.801002+00:00",
+      "surface": "Azure Resource Graph",
+      "completePagination": true,
+      "pageCount": 1,
+      "totalReturnedAssessments": 179,
+      "rootFilesystemMatchingRecords": 0,
+      "registryMatchingRecords": 1,
+      "registryFinding": {
+        "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "displayName": "Container images should be deployed from trusted registries only",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+          "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+        },
+        "resourceDetails": {
+          "ResourceType": "k8s-container",
+          "ResourceName": "pause",
+          "ResourceProvider": "Microsoft.ContainerService",
+          "Source": "Azure"
+        },
+        "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+        "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "additionalData": {
+          "source": "KSPM-Agentless",
+          "namespaceName": "nls-kspm-controller-lab",
+          "topLevelKind": "Deployment",
+          "topLevelName": "kspm-scope-proof-v2",
+          "containerName": "pause",
+          "podNameAlias": "post-rollout-pod-A"
+        },
+        "metadata": {
+          "severity": "High",
+          "managementProvider": "MDC",
+          "policyDefinitionId": ""
+        },
+        "contextualRiskLevel": "Low"
+      },
+      "rootFilesystemFinding": null
+    }
+  ],
+  "registryControl": {
+    "freshSupportingDataObserved": true,
+    "assessmentIdExactSameAcrossBaselinePrePatchCurrent": true,
+    "assessedResourceDetailsExactSameAcrossBaselinePrePatchCurrent": true,
+    "supportingPodChangedFrom": "baseline-pod-A",
+    "supportingPodChangedTo": "post-rollout-pod-A",
+    "supportingPodCreatedUtc": "2026-10-08T14:22:34Z",
+    "supportingPodUidMatchedAcceptedRolloutPrivately": true,
+    "source": "KSPM-Agentless",
+    "resourceType": "k8s-container",
+    "topLevelKind": "Deployment",
+    "status": "Unhealthy",
+    "claimScope": "Trusted-registry recommendation identity across this observed combined experiment and template rollout; not a universal stability guarantee or proof of the isolated single-pod phase.",
+    "serviceDatesUnchangedWhileSupportingPodChanged": true,
+    "dateInterpretation": "firstEvaluationDate and statusChangeDate are not last-scan timestamps. Freshness here comes from the verified post-rollout pod reference."
+  },
+  "rootFilesystem": {
+    "matchingRecordsReturned": {
+      "arm": 0,
+      "arg": 0
+    },
+    "previousAddressHttpStatus": 404,
+    "explicitHealthyObserved": false,
+    "explicitResolvedObserved": false,
+    "explicitStatusClearanceObserved": false,
+    "removalObserved": true,
+    "observationInterval": {
+      "lastObservedPresentUtc": "2026-10-09T14:21:28.682306+00:00",
+      "firstObservedAbsentUtc": "2026-10-09T17:43:11.801002+00:00",
+      "meaning": "Observed transition window between complete captures, not a service evaluation or measured remediation timestamp."
+    },
+    "claimScope": "Removal from the observed result sets following the template fix, alongside fresh workload evidence from the unchanged registry control. The available payloads do not expose a root-filesystem last-scan time, a Healthy transition, or the service internal removal cause.",
+    "globalDefinitionStillAvailable": true,
+    "definitionAvailabilityDoesNotRuleOutExemptions": true
+  },
+  "directGetCorroboration": {
+    "capturedUtc": "2026-10-09T17:44:52.025928+00:00",
+    "sourceSHA256": "f1e09902925cd6b6372bbf504a6953173dc8d98716ce8f36251f2bf3e6de49a3",
+    "apiVersion": "2021-06-01",
+    "targetSource": "Exact virtual assessment IDs retained in the last complete positive ARM capture; no guessed address.",
+    "responses": [
+      {
+        "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+        "httpStatus": 404,
+        "responseState": "not-found-at-requested-address",
+        "failureCategory": "provider-rejection",
+        "attempts": 1
+      },
+      {
+        "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+        "httpStatus": 200,
+        "responseState": "found",
+        "failureCategory": null,
+        "attempts": 1
+      }
+    ]
+  },
+  "metadataCorroboration": {
+    "capturedUtc": "2026-10-09T17:45:18.621734+00:00",
+    "sourceSHA256": "d446ddea9c8489dc33073d21369f19db7ae1a1cca52553594cdbfe2d1386a220",
+    "httpStatus": 200,
+    "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+    "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+    "managementProvider": "MDC",
+    "policyDefinitionId": ""
+  },
+  "portalCorroboration": {
+    "resourceHealthCapturedUtc": "2026-10-09T17:49:16.061Z",
+    "resourceHealthSourceSHA256": "148547ccb02d7e6958b90fbece52dafec287913e7793cd70b4279f685d26c653",
+    "rootTitleSearchCapturedUtc": "2026-10-09T17:45:24.700Z",
+    "rootTitleSearchSourceSHA256": "5283a111eb5b9cdbae00c9152e90551b0da97e876db15d071c048645f40d1dc4",
+    "statusFilterRemoved": true,
+    "onlyRemainingRecommendation": "Container images should be deployed from trusted registries only",
+    "remainingStatus": "Unhealthy",
+    "rootFilesystemListed": false,
+    "explicitHealthyRootFilesystemShown": false,
+    "interpretation": "Portal observation corroborates API absence; an empty title search is not a Healthy result."
+  },
+  "kubernetes": {
+    "capturedUtc": "2026-10-09T17:43:36.969062+00:00",
+    "sourceSHA256": "1dd1eedcb1ae7359f88d07dbf041637dd8a87d498bb2479b848c93abcc24eb2c",
+    "deploymentIdentityUnchanged": true,
+    "clusterIdentityUnchanged": true,
+    "generation": 2,
+    "desiredReplicas": 2,
+    "readyReplicas": 2,
+    "podUidCountsComparedWithAcceptedRollout": {
+      "common": 2,
+      "new": 0,
+      "removed": 0
+    },
+    "readOnlyRootFilesystemInTemplateAndBothPods": true,
+    "imageUnchanged": true,
+    "applicationWriteDenialTestPerformed": false
+  },
+  "experimentLimits": {
+    "isolatedSinglePodPhase": "Kubernetes replacement verified; service follow-up closed inconclusive before the template change.",
+    "run2ScalingPerformed": false,
+    "run2ReplacementAfterHardeningPerformed": false,
+    "secureScoreEffectMeasured": false,
+    "timingIsSla": false,
+    "replicaToFindingRatioUniversal": false
+  },
+  "sourceCaptures": {
+    "firstProductProof": {
+      "sourceSHA256": "55316ae12408343ed0140f6772da0faf4da0c3c08b77f6b75e1bf76d212fdc72",
+      "capturedUtc": "2026-10-08T13:24:43.766505+00:00"
+    },
+    "baselineArm": {
+      "sourceSHA256": "9254eff97747242a2708fc22c156fd619a4465e3eb40c47b88d7fba7c6297ca7",
+      "capturedUtc": "2026-10-08T13:20:43.481407+00:00"
+    },
+    "baselineArg": {
+      "sourceSHA256": "ca4e9df90da38e8b743fb536a0b50127ab3196ac0f2d97d8c9bb5cd7bf2e74fe",
+      "capturedUtc": "2026-10-08T13:20:38.439800+00:00"
+    },
+    "prePatchArm": {
+      "sourceSHA256": "425e73c542356d0e387196e0fe6914ff9908bc23a14b2119ac61a810eeb112fa",
+      "capturedUtc": "2026-10-08T14:20:48.704128+00:00"
+    },
+    "prePatchArg": {
+      "sourceSHA256": "8ea4f39efe78a85961e5dfe9e09b2564d56648fa35f9b8a650b43dbf20413990",
+      "capturedUtc": "2026-10-08T14:20:47.445599+00:00"
+    },
+    "prePatchKubernetes": {
+      "sourceSHA256": "4c8ab0667a174df3699ad6508bb3c4def0ccfd1e8ecffd51f1361ad90ea490b5",
+      "capturedUtc": "2026-10-08T14:20:56.449009+00:00"
+    },
+    "acceptedPostRolloutKubernetes": {
+      "sourceSHA256": "342040a612ae0a2a721bea59720558f44e5ae54c1402098ed638505b5a91e3f5",
+      "capturedUtc": "2026-10-08T14:23:42.186965+00:00"
+    },
+    "templatePatchIntent": {
+      "sourceSHA256": "77af3463ee8dcfb08ab9c4715ff4397a2dc54b24e03a8b26e55c702cc458cc3c",
+      "capturedUtc": "2026-10-08T14:22:32.036796+00:00"
+    },
+    "currentArm": {
+      "sourceSHA256": "d29383ff7ad17652f58c8eba49d4fd29113d0948c58edf86ce8d91072ea7b949",
+      "capturedUtc": "2026-10-09T17:43:21.773633+00:00"
+    },
+    "currentArg": {
+      "sourceSHA256": "3bfd70041b8a18c032e0bed343551ea46501628be7f9477809aa5b905a70c4e8",
+      "capturedUtc": "2026-10-09T17:43:11.801002+00:00"
+    },
+    "currentKubernetes": {
+      "sourceSHA256": "1dd1eedcb1ae7359f88d07dbf041637dd8a87d498bb2479b848c93abcc24eb2c",
+      "capturedUtc": "2026-10-09T17:43:36.969062+00:00"
+    },
+    "lastPositiveRootArm": {
+      "sourceSHA256": "c41ea89e3ba24b6dff55fc8e78a78f287b776e6ba584c03e96fa1c548f1179b1",
+      "capturedUtc": "2026-10-09T14:21:28.682306+00:00"
+    }
+  },
+  "privateProofSHA256": "b90287a76460906b57f6aefcfae3b64b5686da57a2a9b264acbfbbe70ca77123",
+  "redaction": {
+    "sourceFieldsSelectedExplicitly": true,
+    "podNamesReplacedWithAliases": true,
+    "aliasScheme": {
+      "baseline-pod-A": "The old pod named by both recommendations before intervention; later deleted during the single-pod phase.",
+      "post-rollout-pod-A": "The pod created by the template rollout and named by the refreshed registry finding.",
+      "post-rollout-pod-B": "The other pod created by the template rollout.",
+      "single-replacement-pod": "Replacement from the inconclusive single-pod phase."
+    },
+    "omitted": [
+      "account identifiers",
+      "subscription and tenant IDs",
+      "cluster and Kubernetes UIDs",
+      "full ARM and portal URLs",
+      "literal pod names",
+      "local/private paths",
+      "API hostnames",
+      "credentials"
+    ],
+    "hashLimit": "Source hashes identify retained private capture bytes; they do not independently authenticate provider origin. This file is a derived excerpt, not a raw response."
+  },
+  "operations": {
+    "cleanupHeldUntilVettedAndAuthorized": true,
+    "timedCleanupDisabled": true,
+    "automaticChecks": "paused",
+    "cumulativeAllowanceUsd": 50,
+    "allowanceIsEnforcedAzureCap": false,
+    "publicationAuthorized": false,
+    "labPushRequiresApproval": true
+  },
+  "additionalFactAudit": "review-addendum-facts.json"
+}

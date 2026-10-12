@@ -26,8 +26,8 @@ class CollectorBoundaries(unittest.TestCase):
         ]
         self.assertEqual(collector.cluster_reference_count(records, cluster), 2)
         self.assertEqual(collector.resource_type_counts(records),
-                         {'azure': 1, 'k8s-container': 1,
-                          'microsoft.containerservice/managedclusters': 1, 'unknown': 2})
+                         {'k8s-container': 1,
+                          'microsoft.containerservice/managedclusters': 1, 'unknown': 3})
         self.assertEqual(collector.cluster_reference_count([], cluster), 0)
 
     def test_accepts_verified_arm_and_cli_uid_spellings(self):

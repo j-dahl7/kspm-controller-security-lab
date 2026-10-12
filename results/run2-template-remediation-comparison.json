@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "1.0",
+  "before": {
+    "sourceSHA256": "4c8ab0667a174df3699ad6508bb3c4def0ccfd1e8ecffd51f1361ad90ea490b5",
+    "capturedUtc": "2026-10-08T14:20:56.449009+00:00",
+    "phaseLabel": "rolled",
+    "desiredReplicas": 2,
+    "readyReplicas": 2,
+    "podCount": 2
+  },
+  "after": {
+    "sourceSHA256": "342040a612ae0a2a721bea59720558f44e5ae54c1402098ed638505b5a91e3f5",
+    "capturedUtc": "2026-10-08T14:23:42.186965+00:00",
+    "phaseLabel": "remediated",
+    "desiredReplicas": 2,
+    "readyReplicas": 2,
+    "podCount": 2
+  },
+  "sameDeploymentObject": true,
+  "clusterResourceUidCompared": true,
+  "podUidCounts": {
+    "common": 0,
+    "new": 2,
+    "removed": 2
+  },
+  "activeReplicaSets": {
+    "beforeCount": 1,
+    "afterCount": 1,
+    "uidSetChanged": true
+  },
+  "applicationContainers": [
+    {
+      "containerAlias": "container-1",
+      "before": {
+        "podCountWithContainer": 2,
+        "allPodsMatchTemplateImage": true,
+        "allPodsMatchTemplateRootFilesystem": true,
+        "presentInTemplate": true,
+        "readOnlyRootFilesystem": false,
+        "rootFilesystemFieldPresent": true
+      },
+      "after": {
+        "podCountWithContainer": 2,
+        "allPodsMatchTemplateImage": true,
+        "allPodsMatchTemplateRootFilesystem": true,
+        "presentInTemplate": true,
+        "readOnlyRootFilesystem": true,
+        "rootFilesystemFieldPresent": true
+      },
+      "templateImageUnchanged": true,
+      "observedImageIdSetUnchanged": true
+    }
+  ],
+  "scope": "Two observed Kubernetes snapshots; no Defender assessment, clearance, finding stability, or causal claim is established.",
+  "limitations": [
+    "Phase labels are supplied by the operator, not asserted outcomes.",
+    "Container aliases follow the sorted union of application-container names; init and ephemeral containers are not compared.",
+    "Image-ID comparisons are unavailable when either snapshot lacks an ID.",
+    "Matching sidecar hashes establish file consistency, not source authenticity.",
+    "Two snapshots do not establish continuous state between captures.",
+    "Both captures carried the same Azure cluster resource UID; reused resource names alone are never accepted as cluster identity."
+  ]
+}

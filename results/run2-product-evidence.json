@@ -1,0 +1,1195 @@
+{
+  "schemaVersion": "1.1",
+  "run": 2,
+  "asOfUtc": "2026-10-08T14:23:47.578359+00:00",
+  "evidenceClass": "product-observed",
+  "completeRemediationDemonstration": false,
+  "scope": "Observed agentless recommendation identity and Deployment attribution for one namespace, one Deployment, one container and two ready replicas; no generalized replica-to-finding rule.",
+  "workload": {
+    "namespace": "nls-kspm-controller-lab",
+    "deployment": "kspm-scope-proof-v2",
+    "container": "pause",
+    "baselineReadyReplicas": 2,
+    "baselineReadOnlyRootFilesystem": false,
+    "image": "registry.k8s.io/pause@sha256:278fb9dbcca9518083ad1e11276933a2e96f23de604a3a08cc3c80002767d24c"
+  },
+  "findingsObserved": {
+    "rootFilesystemRecommendationId": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+    "trustedRegistriesRecommendationId": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+    "countsPerCompleteCapture": {
+      "rootFilesystem": 1,
+      "trustedRegistries": 1
+    },
+    "severityVersusRisk": "ARG metadata severity is Medium for root filesystem and High for trusted registries; contextual risk.level is Low for both. The portal Risk level column is a different field from metadata severity.",
+    "identityInterpretation": "ResourceType remains k8s-container. The identity segment labeled pod- contains the Deployment name; the actual pod name appears in additionalData.podName. The record names topLevelKind Deployment and topLevelName kspm-scope-proof-v2."
+  },
+  "captures": [
+    {
+      "label": "baselineArm",
+      "surface": "ARM assessments list",
+      "capturedUtc": "2026-10-08T13:20:43.481407+00:00",
+      "sourceSHA256": "9254eff97747242a2708fc22c156fd619a4465e3eb40c47b88d7fba7c6297ca7",
+      "completePagination": true,
+      "pages": 2,
+      "totalReturnedAssessments": 145,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        }
+      ]
+    },
+    {
+      "label": "baselineArg",
+      "surface": "Azure Resource Graph",
+      "capturedUtc": "2026-10-08T13:20:38.439800+00:00",
+      "sourceSHA256": "ca4e9df90da38e8b743fb536a0b50127ab3196ac0f2d97d8c9bb5cd7bf2e74fe",
+      "completePagination": true,
+      "pages": 1,
+      "totalReturnedAssessments": 153,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "Medium",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "High",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        }
+      ]
+    },
+    {
+      "label": "replacementArm",
+      "surface": "ARM assessments list",
+      "capturedUtc": "2026-10-08T14:02:37.111009+00:00",
+      "sourceSHA256": "b97f39d96822348d276418f587059c1e76f9f9e99861471ae3ad4ea8f2fa9339",
+      "completePagination": true,
+      "pages": 2,
+      "totalReturnedAssessments": 145,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        }
+      ]
+    },
+    {
+      "label": "replacementArg",
+      "surface": "Azure Resource Graph",
+      "capturedUtc": "2026-10-08T14:02:31.163731+00:00",
+      "sourceSHA256": "ff4422fc4762c4958d3e607d46730aa1753e9cc0405ddf369063d1a83d260c97",
+      "completePagination": true,
+      "pages": 1,
+      "totalReturnedAssessments": 153,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "Medium",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "High",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        }
+      ]
+    },
+    {
+      "label": "beforeTemplateArm",
+      "surface": "ARM assessments list",
+      "capturedUtc": "2026-10-08T14:20:48.704128+00:00",
+      "sourceSHA256": "425e73c542356d0e387196e0fe6914ff9908bc23a14b2119ac61a810eeb112fa",
+      "completePagination": true,
+      "pages": 2,
+      "totalReturnedAssessments": 145,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        }
+      ]
+    },
+    {
+      "label": "beforeTemplateArg",
+      "surface": "Azure Resource Graph",
+      "capturedUtc": "2026-10-08T14:20:47.445599+00:00",
+      "sourceSHA256": "8ea4f39efe78a85961e5dfe9e09b2564d56648fa35f9b8a650b43dbf20413990",
+      "completePagination": true,
+      "pages": 1,
+      "totalReturnedAssessments": 153,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "Medium",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "High",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        }
+      ]
+    },
+    {
+      "label": "afterTemplateArm",
+      "surface": "ARM assessments list",
+      "capturedUtc": "2026-10-08T14:23:47.578359+00:00",
+      "sourceSHA256": "9cc5d81a6417cd401ba2a918c505e02c6681ca6edda0430a94eca3d5b90fa210",
+      "completePagination": true,
+      "pages": 2,
+      "totalReturnedAssessments": 145,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          }
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        }
+      ]
+    },
+    {
+      "label": "afterTemplateArg",
+      "surface": "Azure Resource Graph",
+      "capturedUtc": "2026-10-08T14:23:33.993168+00:00",
+      "sourceSHA256": "01da260eca3ea62413ffd7b1bb7546a933fb064767909778dc18cbfd64867f7c",
+      "completePagination": true,
+      "pages": 1,
+      "totalReturnedAssessments": 153,
+      "labClusterControlPlaneAssessmentCount": 5,
+      "v2KspmAssessmentCount": 2,
+      "findings": [
+        {
+          "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "displayName": "Immutable (read-only) root filesystem should be enforced for containers",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.2999268Z",
+            "statusChangeDate": "2026-10-08T05:37:44.2999268Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/b4262879-2a96-468f-bacd-6ed4d567bbdd",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "Medium",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        },
+        {
+          "assessmentName": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "displayName": "Container images should be deployed from trusted registries only",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:37:44.0211732Z",
+            "statusChangeDate": "2026-10-08T05:37:44.0211732Z"
+          },
+          "resourceDetails": {
+            "ResourceType": "k8s-container",
+            "ResourceName": "pause",
+            "ResourceProvider": "Microsoft.ContainerService",
+            "Source": "Azure"
+          },
+          "assessedResourceIdentityTail": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause",
+          "assessmentIdentitySuffix": "namespace-nls-kspm-controller-lab-toplevelworkloadkind-deployment-pod-kspm-scope-proof-v2-container-pause/providers/Microsoft.Security/assessments/12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+          "additionalData": {
+            "source": "KSPM-Agentless",
+            "namespaceName": "nls-kspm-controller-lab",
+            "topLevelKind": "Deployment",
+            "topLevelName": "kspm-scope-proof-v2",
+            "containerName": "pause",
+            "podNameAlias": "baseline-pod-A"
+          },
+          "metadata": {
+            "severity": "High",
+            "managementProvider": "MDC",
+            "policyDefinitionId": ""
+          },
+          "contextualRiskLevel": "Low"
+        }
+      ],
+      "azurePolicyAddonFinding": {
+        "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+        "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+        "status": {
+          "code": "Unhealthy",
+          "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+          "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+        }
+      },
+      "controlPlaneStatusDates": [
+        {
+          "assessmentName": "08e628db-e2ed-4793-bc91-d13e684401c3",
+          "displayName": "Azure Kubernetes Service clusters should have the Azure Policy add-on for Kubernetes installed",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8014168Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8014168Z"
+          }
+        },
+        {
+          "assessmentName": "1a2b5b4c-f80d-46e7-ac81-b51a9fb363de",
+          "displayName": "Kubernetes API server should be configured with restricted access",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9853984Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9853984Z"
+          }
+        },
+        {
+          "assessmentName": "56a83a6e-c417-42ec-b567-1e6fcb3d09a9",
+          "displayName": "Azure Kubernetes Service clusters should have Defender profile enabled",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.8022154Z",
+            "statusChangeDate": "2026-10-08T05:32:27.8022154Z"
+          }
+        },
+        {
+          "assessmentName": "b0fdc63a-38e7-4bab-a7c4-2c2665abbaa9",
+          "displayName": "Role-Based Access Control should be used on Kubernetes Services",
+          "status": {
+            "code": "Healthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.9748928Z",
+            "statusChangeDate": "2026-10-08T05:32:27.9748928Z"
+          }
+        },
+        {
+          "assessmentName": "bb318338-de6a-42ff-8428-8274c897d564",
+          "displayName": "Diagnostic logs in Kubernetes services should be enabled",
+          "status": {
+            "code": "Unhealthy",
+            "firstEvaluationDate": "2026-10-08T05:32:27.3956325Z",
+            "statusChangeDate": "2026-10-08T05:32:27.3956325Z"
+          }
+        }
+      ]
+    }
+  ],
+  "kubernetesReconciliation": {
+    "capturedUtc": "2026-10-08T13:21:00.086348+00:00",
+    "sourceSHA256": "1be04575f9f731f7128b33092437c6cbae2bbd72792f1a898a53d6517538b42e",
+    "originalBaselineSourceSHA256": "a7a878860c967e155fb2c036e1b8396cef146d0fa67353fe8e1d2923325af55d",
+    "verified": {
+      "currentClusterUidMatchesBaseline": true,
+      "deploymentUidMatchesBaseline": true,
+      "templateAndGenerationUnchanged": true,
+      "readyReplicas": 2,
+      "podUidMatchesBaseline": true,
+      "podReplicaSetDeploymentUidChainMatches": true,
+      "controllerEncodedInAssessedTarget": true,
+      "podNameOnlyInSupportingData": true
+    },
+    "proofSourceSHA256": "55316ae12408343ed0140f6772da0faf4da0c3c08b77f6b75e1bf76d212fdc72",
+    "uidValuesPublished": false
+  },
+  "addonEvidence": {
+    "prerequisitesCapturedUtc": "2026-10-08T13:20:51.764869+00:00",
+    "prerequisitesSourceSHA256": "9724dac516e00151c3800a34ecf3cd641a89dd3ea9828e4e9022ca492ab7bef7",
+    "aksAddonProfiles": null,
+    "captureAzurePolicyAddonEnabled": null,
+    "defenderAddonRecommendationId": "08e628db-e2ed-4793-bc91-d13e684401c3",
+    "defenderAddonRecommendationStatus": "Unhealthy",
+    "interpretation": "AKS configuration did not enumerate an Azure Policy add-on, and Defender reported its add-on recommendation Unhealthy while both KSPM-Agentless findings were present. This demonstrates those two agentless checks in this lab without the add-on; it does not change prerequisites for all workload-hardening checks."
+  },
+  "timing": {
+    "clusterDeploymentCompletedUtc": "2026-10-07T23:02:59Z",
+    "firstWorkloadPodCreatedUtc": "2026-10-07T23:05:16Z",
+    "firstSuccessfulMatchingExportUtc": "2026-10-08T13:20:38.439800+00:00",
+    "rootFilesystemServiceFirstEvaluationUtc": "2026-10-08T05:37:44.2999268Z",
+    "minutesFromFirstWorkloadPodToServiceFirstEvaluation": 392.47,
+    "minutesFromClusterDeploymentToRootFilesystemServiceFirstEvaluation": 394.75,
+    "controlPlaneServiceFirstEvaluations": "Five cluster-level records report first evaluations during 2026-10-08T05:32:27Z; exact dates are preserved per capture.",
+    "collectionGap": "No successful exports in this local evidence between approximately 02:09 and 13:20 UTC. Service timestamps are not measured delivery latency or a fixed scan interval.",
+    "run1Comparison": "Run 1 workload existed about 65 minutes. Its empty captures are consistent with this later run taking about 6.5 hours to first evaluate, but the cause of its empty result is not established."
+  },
+  "podReplacement": {
+    "startedUtc": "2026-10-08T13:41:33.845962+00:00",
+    "requestReceiptUtc": "2026-10-08T13:41:35.878272+00:00",
+    "intentSourceSHA256": "d08cbaeb8c14047d4234f6b4cc15f7bcfdac90c34ef9ca8497dcca2825f8f215",
+    "receiptSourceSHA256": "31d37c9c0d2427a228abe16762663f18ab56df2c562320f336355217753c71af",
+    "beforeCaptureUtc": "2026-10-08T13:39:05.108060+00:00",
+    "beforeSourceSHA256": "370eeb4ab9c2d96881829dcc76f00a362c4016ddcccc1c6b29a3838b8041b4e2",
+    "afterCaptureUtc": "2026-10-08T13:42:29.832684+00:00",
+    "afterSourceSHA256": "e29f837e14be102a498467926a454176654f17bdf5a27d7f7daa5171fe1e362d",
+    "deletedPodAlias": "baseline-pod-A",
+    "replacementPodAlias": "single-replacement-pod",
+    "replacementCreatedUtc": "2026-10-08T13:41:36Z",
+    "kubernetesResult": {
+      "readyReplicas": 2,
+      "retainedPods": 1,
+      "newPods": 1,
+      "removedPods": 1,
+      "sameDeployment": true,
+      "sameTemplate": true,
+      "sameActiveReplicaSet": true,
+      "readOnlyRootFilesystem": false
+    },
+    "returnedAssessmentAndTargetIdentitiesEqual": {
+      "b4262879-2a96-468f-bacd-6ed4d567bbdd": true,
+      "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0": true
+    },
+    "supportingPodStillDeletedPod": true,
+    "serviceDatesUnchanged": true,
+    "freshServiceEvidenceObserved": false,
+    "findingStabilityProven": false,
+    "interpretation": "The single-pod replacement was Kubernetes-verified. Before proceeding to the template fix, neither surface supplied independently fresh evidence for that stage. Later template-stage evidence cannot retrospectively prove standalone pod-replacement stability.",
+    "standaloneStageOutcome": "closed-inconclusive-before-template-change",
+    "lastStandaloneServiceCheckUtc": "2026-10-08T14:20:48.704128+00:00"
+  },
+  "portalCorroboration": {
+    "observedUtc": "2026-10-08T13:28:35.468Z",
+    "visibleRecommendations": [
+      "Immutable (read-only) root filesystem should be enforced for containers",
+      "Container images should be deployed from trusted registries only"
+    ],
+    "resourceHealth": "Unhealthy",
+    "visibleRiskLevel": "Low",
+    "limitation": "Portal row visibility corroborates the recommendations. Exact controller JSON paths are evidenced by ARM and ARG, not claimed legible in the narrow portal grid.",
+    "sourceSHA256": {
+      "portalDomSHA256": "27c3f58b0e09c2d654c12f2036e73e0af8167ca83af37052db6bf693361a11c6",
+      "image": "dd9f9d672be4b5de0604e24837f38380066d7fbd3b73596da8fa5b551761b250",
+      "context": "026534d936b4eded70ebf62872f91405917715d06274c001bf191087f19aa6bd"
+    }
+  },
+  "provenance": {
+    "method": "Each source JSON was verified against its SHA-256 sidecar before selecting an explicit field allowlist. Hashes identify the retained source bytes; they do not independently authenticate Azure as origin.",
+    "omitted": [
+      "subscription and tenant IDs",
+      "full ARM and portal URLs",
+      "API hostnames",
+      "cluster and Kubernetes UIDs",
+      "private file paths",
+      "credentials",
+      "literal pod names; stable aliases retained"
+    ],
+    "sourceRecordsAreRaw": false,
+    "sourceRecordDescription": "Public excerpt is derived from private captures; credential redactions, when present in source captures, are recorded there."
+  },
+  "notEstablished": [
+    "standalone finding stability after single-pod replacement",
+    "finding stability through fresh evaluation after template change",
+    "root-filesystem clearance after remediation",
+    "trusted-registry control refresh after rollout",
+    "scale behavior in run 2",
+    "Secure Score effect",
+    "universal two-replicas-to-one-finding ratio"
+  ],
+  "publicationAuthorized": false,
+  "templateRemediation": {
+    "startedUtc": "2026-10-08T14:22:32.036796+00:00",
+    "patchReceiptUtc": "2026-10-08T14:22:34.084707+00:00",
+    "intentSourceSHA256": "77af3463ee8dcfb08ab9c4715ff4397a2dc54b24e03a8b26e55c702cc458cc3c",
+    "patchSourceSHA256": "1e3ac51c2cdd349534e2cd1e6e89913295ba15e5e6735b222e7d149994b93195",
+    "receiptSourceSHA256": "6e8c4dc903aae49c0bd67ad071944ddb94cb50d04a449cafaf645bc433f619da",
+    "beforeCaptureUtc": "2026-10-08T14:20:56.449009+00:00",
+    "beforeSourceSHA256": "4c8ab0667a174df3699ad6508bb3c4def0ccfd1e8ecffd51f1361ad90ea490b5",
+    "afterCaptureUtc": "2026-10-08T14:23:42.186965+00:00",
+    "afterSourceSHA256": "342040a612ae0a2a721bea59720558f44e5ae54c1402098ed638505b5a91e3f5",
+    "observationSourceSHA256": "609abf118266af02515909613049f9901e2b62d5d3c0432539f604e5586b6d80",
+    "comparisonArtifact": "run2-template-remediation-comparison.json",
+    "kubernetesResult": {
+      "sameDeployment": true,
+      "generationBefore": 1,
+      "generationAfter": 2,
+      "readyReplicas": 2,
+      "newPods": 2,
+      "removedPods": 2,
+      "activeReplicaSetChanged": true,
+      "readOnlyRootFilesystemBefore": false,
+      "readOnlyRootFilesystemAfter": true,
+      "onlySelectedTemplateFieldChanged": true,
+      "imageAndImageIdUnchanged": true
+    },
+    "postRolloutPods": [
+      {
+        "name": "post-rollout-pod-A",
+        "createdUtc": "2026-10-08T14:22:34Z"
+      },
+      {
+        "name": "post-rollout-pod-B",
+        "createdUtc": "2026-10-08T14:22:37Z"
+      }
+    ],
+    "scalingPerformed": false,
+    "controlRecommendationId": "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0",
+    "controlInterpretation": "Registry/image configuration was unchanged. A fresh trusted-registry record naming a post-rollout pod could corroborate processing of the rolled-out workload; it would not alone establish fresh root-filesystem evaluation or clearance.",
+    "freshServiceEvidenceObserved": false,
+    "rootFilesystemClearanceObserved": false,
+    "findingStabilityProven": false,
+    "latestServiceResult": "Both findings remain Unhealthy, with the pre-intervention pod name and unchanged first-evaluation/status-change dates. These returned payloads do not represent verified post-rollout evaluations."
+  },
+  "recordRole": "Historical October 8 baseline and intervention excerpts; latest result is run2-post-rollout-evidence.json.",
+  "supersededBy": "run2-post-rollout-evidence.json",
+  "historicalCleanupDeadlineUtc": "2026-10-08T22:47:38Z",
+  "redactionRevision": {
+    "recordedUtc": "2026-10-09T18:53:48.928231+00:00",
+    "priorUnpublishedDerivativeSHA256": "6d4b1a4f5a0d349e1750158c4d9adcfdb81387ef437f161dc1f3ca7eb7b1703d",
+    "change": "Literal pod names replaced with stable aliases; original source captures, their hashes, observation times and measured outcomes are unchanged. The old deadline is explicitly historical.",
+    "aliasScheme": {
+      "baseline-pod-A": "The old pod named by both recommendations before intervention; later deleted during the single-pod phase.",
+      "post-rollout-pod-A": "The pod created by the template rollout and named by the refreshed registry finding.",
+      "post-rollout-pod-B": "The other pod created by the template rollout.",
+      "single-replacement-pod": "Replacement from the inconclusive single-pod phase."
+    }
+  }
+}

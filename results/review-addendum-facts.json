@@ -1,0 +1,526 @@
+{
+  "schemaVersion": "1.0",
+  "recordedUtc": "2026-10-09T20:40:15.877213+00:00",
+  "evidenceBasis": "Retained raw captures with verified SHA-256 sidecars; no new Azure calls.",
+  "statistics": {
+    "scope": "All retained complete full-subscription ARG assessment exports across both lab runs through the first post-rollout absence capture.",
+    "windowStartUtc": "2026-10-07T20:28:10.958052+00:00",
+    "windowEndInclusiveUtc": "2026-10-09T17:43:11.801002+00:00",
+    "fullArgExports": 32,
+    "classificationCounts": {
+      "preflight": 2,
+      "run1-post-workload": 6,
+      "run2-post-baseline": 24
+    },
+    "postWorkloadExportsAcrossBothRuns": 30,
+    "kspmAgentlessRowSightings": 33,
+    "statusCounts": {
+      "Unhealthy": 33
+    },
+    "distinctFindingIdentities": 2,
+    "exportsWithNoKspmRows": 15,
+    "exportsWithTwoKspmRows": 16,
+    "exportsWithOneKspmRow": 1,
+    "query": "securityresources | where type =~ \"microsoft.security/assessments\" | project id, name, type, subscriptionId, properties",
+    "querySHA256": "56dcfae1f5bff5244493987f7d3bbb48d0c9e34204d25b8bea7fc0f41ea6e0fb",
+    "selectionRule": "properties.additionalData.source exactly equals KSPM-Agentless; no status filter was applied.",
+    "exclusions": {
+      "focusedArticleQueryValidation": {
+        "checkedUtc": "2026-10-09T19:02:40.280357+00:00",
+        "rowCount": 1,
+        "sourceCaptureSHA256": "e106c4f5a565a4dcd56a556b58702bec17b1e7c61d86b03cda04287de743997b",
+        "reason": "Outside the fixed cutoff and a focused workload query, not a full subscription assessment export."
+      },
+      "otherExclusions": [
+        "ARM exports and targeted GETs do not count toward ARG-export statistics.",
+        "Portal snapshots and derived evidence summaries do not count as ARG exports."
+      ]
+    },
+    "sightingsByAssessmentName": {
+      "12ceffa0-bd66-4ae9-abbf-58f88b0a7bc0": 17,
+      "b4262879-2a96-468f-bacd-6ed4d567bbdd": 16
+    }
+  },
+  "includedFullArgExports": [
+    {
+      "sourceFile": "20261007T202810958052Z-preflight-arg-assessments.json",
+      "capturedUtc": "2026-10-07T20:28:10.958052+00:00",
+      "sha256": "7b35dc6531f8e65a64d2517b1d965c2b62e406ea466f5cf53cd2e64ad2b80a50",
+      "phase": "preflight",
+      "classification": "preflight",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T203645662743Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-07T20:36:45.662743+00:00",
+      "sha256": "95c5691afa0f4fea14433a52054d9f2d2fc21301e8f0f077da856e79d2d571f3",
+      "phase": "baseline",
+      "classification": "run1-post-workload",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T203729360326Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-07T20:37:29.360326+00:00",
+      "sha256": "1889a2f32225b7e99a799a5a9b46d97ef029f4fdccea7eacba9e8697c34b6215",
+      "phase": "baseline",
+      "classification": "run1-post-workload",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T210302693199Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-07T21:03:02.693199+00:00",
+      "sha256": "d7569782f9071a7c4eb7fb146bba883976e84b71923d0fb42ad0cea4aa4195f3",
+      "phase": "baseline",
+      "classification": "run1-post-workload",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T211442750371Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-07T21:14:42.750371+00:00",
+      "sha256": "c6aa0d551577401ab7e488b58d843c4b40a66da8c1e7a7461137fd2ba8ecc815",
+      "phase": "baseline",
+      "classification": "run1-post-workload",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T212304772485Z-scaled-arg-assessments.json",
+      "capturedUtc": "2026-10-07T21:23:04.772485+00:00",
+      "sha256": "97de54d1dec59bbebdd609cc34743bfe5dbfd69354e0ac11fcbab4a0dfe2b771",
+      "phase": "scaled",
+      "classification": "run1-post-workload",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T212602682998Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-07T21:26:02.682998+00:00",
+      "sha256": "f1eea8f3803036fb1ac220a0f8fe6ac9bab92934697d7ab91731e58aa96d0a73",
+      "phase": "remediated",
+      "classification": "run1-post-workload",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T230019985454Z-preflight-arg-assessments.json",
+      "capturedUtc": "2026-10-07T23:00:19.985454+00:00",
+      "sha256": "ad53aa4063e1cc7714e17fd9181eb28fb9bdf044e46716e513ed8df8061a1ea8",
+      "phase": "preflight",
+      "classification": "preflight",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T230826234083Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-07T23:08:26.234083+00:00",
+      "sha256": "23cc0f3337c34f95a0d7d6ba85927818ca985af351743e1740091f0dc6079240",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261007T234319669259Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-07T23:43:19.669259+00:00",
+      "sha256": "a6ac44699d85cd3bcf29be10f6014799b35acf2291efa6dd5e6817a7bbbd4a16",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261008T002653657955Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-08T00:26:53.657955+00:00",
+      "sha256": "71a4bd02bdc207d3330d30197ab6ff78a2c686c0209ae6cda7f3bdee56bdaec6",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261008T004947391585Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-08T00:49:47.391585+00:00",
+      "sha256": "7e74f83ff3a5a3b83f9906f251fb38b106944d54d37ca2546cc7f063442c91b6",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261008T005731058996Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-08T00:57:31.058996+00:00",
+      "sha256": "27a2b80a1e98eb85e5f0ea3a82cf5d7440075fdea4b1146259590f580fd26bd5",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261008T014321026289Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-08T01:43:21.025771+00:00",
+      "sha256": "4b0e4f2746bf2c5815f8829d7b94a7ad3a643f7df3762b642d5126e30c00fd7c",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261008T020945724463Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-08T02:09:45.724463+00:00",
+      "sha256": "c16db15301a54e9666acbabf870262057beb9b3f01c9eaa0c9e22032599dd038",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 141,
+      "kspmAgentlessRowSightings": 0,
+      "statusCounts": {}
+    },
+    {
+      "sourceFile": "20261008T132038441318Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-08T13:20:38.439800+00:00",
+      "sha256": "ca4e9df90da38e8b743fb536a0b50127ab3196ac0f2d97d8c9bb5cd7bf2e74fe",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T133215045815Z-baseline-arg-assessments.json",
+      "capturedUtc": "2026-10-08T13:32:15.045304+00:00",
+      "sha256": "caa1d7585af7cfa733ded155150c4941bb1e8f17e79e7b30f3d6bc19cebc603f",
+      "phase": "baseline",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T134219928335Z-rolled-arg-assessments.json",
+      "capturedUtc": "2026-10-08T13:42:19.928335+00:00",
+      "sha256": "a7d8f3c035540e47150eb42487681465b0d940dfb16c3b1400bfe4561687f68f",
+      "phase": "rolled",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T140231165275Z-rolled-arg-assessments.json",
+      "capturedUtc": "2026-10-08T14:02:31.163731+00:00",
+      "sha256": "ff4422fc4762c4958d3e607d46730aa1753e9cc0405ddf369063d1a83d260c97",
+      "phase": "rolled",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T142047445599Z-rolled-arg-assessments.json",
+      "capturedUtc": "2026-10-08T14:20:47.445599+00:00",
+      "sha256": "8ea4f39efe78a85961e5dfe9e09b2564d56648fa35f9b8a650b43dbf20413990",
+      "phase": "rolled",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T142333993679Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T14:23:33.993168+00:00",
+      "sha256": "01da260eca3ea62413ffd7b1bb7546a933fb064767909778dc18cbfd64867f7c",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T144820133210Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T14:48:20.133210+00:00",
+      "sha256": "6a13c64d8b2d6115ddded864f00ad695b5595b4b57b3e41411df0b8e1d046736",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T161512406364Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T16:15:12.405364+00:00",
+      "sha256": "7fa4360ba0629d606f3637fc3bad6ec11d582779497d4bd201ef4948afff51ce",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T172641056254Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T17:26:41.055252+00:00",
+      "sha256": "fd153789315151d3a0712b9e8e0e638f3889b0919cce421fb98c3f87bff93c3c",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T184243539099Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T18:42:43.538099+00:00",
+      "sha256": "17ba41368eeaaf7b160bdcb6de7638115c7488a66b1a8757ff4ff987b64c1d3d",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T193548372261Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T19:35:48.371261+00:00",
+      "sha256": "a0a5bc03a4cea9f40e1ba71b2f0bbc0ee40d611fc09b72405f526ee4941c5099",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 153,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T212515234408Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T21:25:15.233407+00:00",
+      "sha256": "48c6330f186035b6435a15b6255761494eafddc0489ff481f119f22140428879",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 154,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261008T230544372666Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-08T23:05:44.371668+00:00",
+      "sha256": "d57af5c6668d925a3a6ff2cb91aa1ddf64265fdae8fcba04be2c7d33f087e5a9",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 154,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261009T024451181497Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-09T02:44:51.181497+00:00",
+      "sha256": "bbc0756e950fd1e6e5f758fd6a69369175fd0d7420ca3efb9355f6e58d36cda1",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 154,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261009T132219468154Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-09T13:22:19.466153+00:00",
+      "sha256": "419fc258efda2ea8e9740fd74744e15235f9979f4f7e60cce49652e9045f0b64",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 180,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261009T141537233231Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-09T14:15:37.230233+00:00",
+      "sha256": "d6ba5d5a871dc2b28d60a5698c2a0954fd699aabfb86af4a28dbccac4f44a23e",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 180,
+      "kspmAgentlessRowSightings": 2,
+      "statusCounts": {
+        "Unhealthy": 2
+      }
+    },
+    {
+      "sourceFile": "20261009T174311803026Z-remediated-arg-assessments.json",
+      "capturedUtc": "2026-10-09T17:43:11.801002+00:00",
+      "sha256": "3bfd70041b8a18c032e0bed343551ea46501628be7f9477809aa5b905a70c4e8",
+      "phase": "remediated",
+      "classification": "run2-post-baseline",
+      "recordCount": 179,
+      "kspmAgentlessRowSightings": 1,
+      "statusCounts": {
+        "Unhealthy": 1
+      }
+    }
+  ],
+  "deletedPodReference": {
+    "deletionRequestAcceptedUtc": "2026-10-08T13:41:35.878272+00:00",
+    "deletedPodAbsentFromReplacementCapture": true,
+    "replacementCaptureUtc": "2026-10-08T13:42:29.832684+00:00",
+    "observations": [
+      {
+        "surface": "ARM",
+        "capturedUtc": "2026-10-09T14:21:28.682306+00:00",
+        "sourceSHA256": "c41ea89e3ba24b6dff55fc8e78a78f287b776e6ba584c03e96fa1c548f1179b1",
+        "bothTargetRecommendationsStillNameDeletedPod": true,
+        "elapsedSinceDeletionRequestAcceptedSeconds": 88792.804034,
+        "elapsedSinceDeletionRequestAccepted": "1 day, 0:39:52.804034"
+      },
+      {
+        "surface": "ARG",
+        "capturedUtc": "2026-10-09T14:15:37.230233+00:00",
+        "sourceSHA256": "d6ba5d5a871dc2b28d60a5698c2a0954fd699aabfb86af4a28dbccac4f44a23e",
+        "bothTargetRecommendationsStillNameDeletedPod": true,
+        "elapsedSinceDeletionRequestAcceptedSeconds": 88441.351961,
+        "elapsedSinceDeletionRequestAccepted": "1 day, 0:34:01.351961"
+      }
+    ],
+    "meaning": "The source still named a deleted pod. This is an observation of returned supporting detail, not proof that the backend never evaluated anything after deletion."
+  },
+  "inactiveReplicaSet": {
+    "observedUtc": "2026-10-09T17:43:36.969062+00:00",
+    "sameOldReplicaSetAsBaseline": true,
+    "desiredReplicas": 0,
+    "actualReplicas": 0,
+    "oldTemplateReadOnlyRootFilesystem": false,
+    "currentOwnedPods": 0,
+    "activeDeploymentAndBothCurrentPodsReadOnly": true,
+    "rootFindingAbsentFromContemporaneousCompleteExports": true,
+    "meaning": "Retained inactive revision history coexisted with the observed absence; no general evaluator contract is inferred."
+  },
+  "firstEvaluationTiming": {
+    "workloadCreatedUtc": "2026-10-07T23:05:16Z",
+    "rootFirstEvaluationUtc": "2026-10-08T05:37:44.2999268Z",
+    "registryFirstEvaluationUtc": "2026-10-08T05:37:44.0211732Z",
+    "rootFirstEvaluationAfterCreationSeconds": 23548.299926,
+    "registryFirstEvaluationAfterCreationSeconds": 23548.021173,
+    "firstObservedArgUtc": "2026-10-08T13:20:38.439800+00:00",
+    "firstObservedArmUtc": "2026-10-08T13:20:43.481407+00:00",
+    "firstObservedArgAfterCreationSeconds": 51322.4398,
+    "meaning": "Service first-evaluation timestamps are about 6h32m after workload creation; local observation began later. Neither is an exact delivery latency or a fixed scan cadence."
+  },
+  "retainedRemediationWording": {
+    "sourceField": "properties.metadata.remediationDescription",
+    "sourceCaptureSHA256": "ca4e9df90da38e8b743fb536a0b50127ab3196ac0f2d97d8c9bb5cd7bf2e74fe",
+    "quoteFragments": [
+      "For these pods, set the readOnlyRootFilesystem flag to 'true'",
+      "redeploy the pod with the updated spec."
+    ],
+    "totalQuotedWords": 16,
+    "meaning": "Selected literal fragments from retained Microsoft recommendation metadata; not a universal status-transition contract.",
+    "assessmentName": "b4262879-2a96-468f-bacd-6ed4d567bbdd"
+  },
+  "sourceCaptures": {
+    "podDeletionIntent": {
+      "sourceFile": "run2-stage1-replacement-intent.json",
+      "sha256": "d08cbaeb8c14047d4234f6b4cc15f7bcfdac90c34ef9ca8497dcca2825f8f215",
+      "capturedUtc": "2026-10-08T13:41:33.845962+00:00"
+    },
+    "podDeletionReceipt": {
+      "sourceFile": "20261008T134135984864Z-stage1-pod-delete-receipt.json",
+      "sha256": "31d37c9c0d2427a228abe16762663f18ab56df2c562320f336355217753c71af",
+      "capturedUtc": "2026-10-08T13:41:35.878272+00:00"
+    },
+    "afterSinglePodReplacementKubernetes": {
+      "sourceFile": "20261008T134229832684Z-rolled-kubernetes.json",
+      "sha256": "e29f837e14be102a498467926a454176654f17bdf5a27d7f7daa5171fe1e362d",
+      "capturedUtc": "2026-10-08T13:42:29.832684+00:00"
+    },
+    "lastOldPodARM": {
+      "sourceFile": "20261009T142128814534Z-remediated-assessments.json",
+      "sha256": "c41ea89e3ba24b6dff55fc8e78a78f287b776e6ba584c03e96fa1c548f1179b1",
+      "capturedUtc": "2026-10-09T14:21:28.682306+00:00"
+    },
+    "lastOldPodARG": {
+      "sourceFile": "20261009T141537233231Z-remediated-arg-assessments.json",
+      "sha256": "d6ba5d5a871dc2b28d60a5698c2a0954fd699aabfb86af4a28dbccac4f44a23e",
+      "capturedUtc": "2026-10-09T14:15:37.230233+00:00"
+    },
+    "postRolloutKubernetes": {
+      "sourceFile": "20261009T174336969062Z-remediated-kubernetes.json",
+      "sha256": "1dd1eedcb1ae7359f88d07dbf041637dd8a87d498bb2479b848c93abcc24eb2c",
+      "capturedUtc": "2026-10-09T17:43:36.969062+00:00"
+    },
+    "baselineKubernetes": {
+      "sourceFile": "20261007T230537407419Z-baseline-kubernetes.json",
+      "sha256": "a7a878860c967e155fb2c036e1b8396cef146d0fa67353fe8e1d2923325af55d",
+      "capturedUtc": "2026-10-07T23:05:37.407419+00:00"
+    },
+    "productBaselineARG": {
+      "sourceFile": "20261008T132038441318Z-baseline-arg-assessments.json",
+      "sha256": "ca4e9df90da38e8b743fb536a0b50127ab3196ac0f2d97d8c9bb5cd7bf2e74fe",
+      "capturedUtc": "2026-10-08T13:20:38.439800+00:00"
+    },
+    "productBaselineARM": {
+      "sourceFile": "20261008T132043625245Z-baseline-assessments.json",
+      "sha256": "9254eff97747242a2708fc22c156fd619a4465e3eb40c47b88d7fba7c6297ca7",
+      "capturedUtc": "2026-10-08T13:20:43.481407+00:00"
+    }
+  },
+  "privateProofSHA256": "ee5c01f08710c63a2f28c4a5ccc453d249b604085df5df44fd9847e00a9e0728",
+  "limits": [
+    "Row-sightings count repeated appearances of two findings across snapshots, not 33 distinct findings.",
+    "The 32-export scope includes two preflight exports; it is not the run-2 combined ARM/ARG observation count.",
+    "All sampled rows were Unhealthy; this does not establish that Healthy can never appear or was never present between captures.",
+    "No assertion is made that corrected findings must disappear as a universal service contract.",
+    "Deleted-pod duration uses the deletion request acceptance receipt, not an exact measured disappearance time.",
+    "An inactive historical ReplicaSet is not an unremediated running pod, and its coexistence does not establish a universal evaluator selection rule.",
+    "The 6.5-hour figure is derived from service first-evaluation dates, not observed arrival latency."
+  ],
+  "suggestedProse": [
+    "Across 32 complete Resource Graph exports retained from October 7 at 20:28 UTC through October 9 at 17:43 UTC, I counted 33 KSPM-Agentless row-sightings, all Unhealthy. These were repeated sightings of two findings, not 33 distinct findings. The set includes two preflight exports. No Healthy row was captured in this sample; that does not establish that this assessment path can never return one.",
+    "The old pod reference outlived the pod. An ARM export at 14:21:28 UTC on October 9 still named the pod whose deletion request had been accepted at 13:41:35 UTC the previous day—about 24 hours 40 minutes earlier. The nearest preceding complete ARG export, at 14:15:37 UTC, also retained that reference. These were separate observations, not simultaneous reads or measurements of the backend scan interval.",
+    "At the 17:43 Kubernetes capture, the old ReplicaSet still retained readOnlyRootFilesystem: false, but both its desired and actual replica counts were zero and it owned none of the current pods. The active Deployment and both current pods were read-only. I did not delete that rollback history to obtain the observed finding disappearance.",
+    "The findings' first-evaluation timestamps were about 6 hours 32 minutes after workload creation. I first captured the findings locally at 13:20 UTC on October 8. The service timestamps and the time I observed the results answer different questions; neither defines a fixed delivery delay."
+  ],
+  "cloudMutations": false,
+  "publicationAuthorized": false,
+  "derivativeProvenance": {
+    "reviewedSourceSHA256": "40b7292fa51d479b7c6807d6ac9596ecddffdf29dd1c29c22afdb9b50916f9e7",
+    "change": "Identifier field labels use assessmentName rather than key; all facts and source-capture hashes remain unchanged."
+  }
+}

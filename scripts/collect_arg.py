@@ -4,15 +4,15 @@ POST invokes Resource Graph's query operation, not an Azure resource mutation.
 """
 import argparse
 from datetime import datetime, timezone
-import hashlib
 import json
 from pathlib import Path
-import re
 import sys
 import tempfile
 
-from collect_assessments import (GUID, az_json, cluster_reference_count, ensure_private_directory,
-                                 resource_type_counts, schema_paths)
+from collect_assessments import (GUID, DEFAULT_ASSESSMENT_KEYS, CLUSTER_REFERENCE_DEFINITION,
+                                 az_json, cluster_reference_count, ensure_private_directory,
+                                 resource_type_counts, schema_paths, candidate_coverage,
+                                 validate_capture_scope, write_private_capture)
 
 ARG_URL = 'https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01'
 QUERY = ('securityresources '
@@ -93,16 +93,15 @@ def main():
     parser.add_argument('--subscription', required=True)
     parser.add_argument('--cluster-id', required=True)
     parser.add_argument('--namespace', default='nls-kspm-controller-lab')
+    parser.add_argument('--workload')
+    parser.add_argument('--assessment-key', action='append', default=[])
     parser.add_argument('--phase', choices=['preflight', 'baseline', 'scaled', 'rolled', 'remediated'], required=True)
     args = parser.parse_args()
-    if not GUID.fullmatch(args.subscription):
-        parser.error('subscription must be a GUID')
-    cluster_pattern = (rf'/subscriptions/{re.escape(args.subscription)}/resourcegroups/[^/]+'
-                       r'/providers/microsoft\.containerservice/managedclusters/[^/]+')
-    if not re.fullmatch(cluster_pattern, args.cluster_id, flags=re.IGNORECASE):
-        parser.error('cluster-id must identify an AKS cluster in the selected subscription')
-    if not args.namespace.strip():
-        parser.error('namespace must not be empty')
+    try:
+        validate_capture_scope(args.subscription, args.cluster_id, args.namespace,
+                               args.workload, args.assessment_key)
+    except ValueError as error:
+        parser.error(str(error))
     account = az_json(['account', 'show', '--subscription', args.subscription])
     if not isinstance(account, dict) or account.get('id', '').lower() != args.subscription.lower():
         raise RuntimeError('Azure subscription mismatch')
@@ -110,28 +109,23 @@ def main():
     started = datetime.now(timezone.utc).isoformat()
     pages = capture_pages(lambda body: request_page(body, args.subscription, folder), args.subscription)
     records = [row for page in pages for row in page['data']]
-    needles = [args.cluster_id.lower(), args.namespace.lower(), args.cluster_id.split('/')[-1].lower()]
-    candidates = [row for row in records if any(n in json.dumps(row).lower() for n in needles)]
+    candidates, matches = candidate_coverage(records, args.cluster_id, args.namespace,
+                                             args.workload, args.assessment_key)
     payload = {
         'source': 'AzureResourceGraph', 'captureStartedUtc': started,
         'capturedUtc': datetime.now(timezone.utc).isoformat(), 'phase': args.phase,
         'subscriptionId': args.subscription, 'clusterId': args.cluster_id,
-        'namespace': args.namespace, 'query': QUERY, 'completePagination': True,
+        'namespace': args.namespace, 'workload': args.workload, 'query': QUERY, 'completePagination': True,
+        'candidateAssessmentKeys': sorted(set(DEFAULT_ASSESSMENT_KEYS) | {key.lower() for key in args.assessment_key}),
         'pageCount': len(pages), 'assessmentCount': len(records),
-        'candidateCount': len(candidates), 'candidateSelection': 'broad text; manual review required',
+        'candidateCount': len(candidates), 'candidateSelection': 'independent key/title/type/text leads; attribution and freshness require review',
+        'candidateMatches': matches, 'clusterReferenceDefinition': CLUSTER_REFERENCE_DEFINITION,
         'resourceTypeCounts': resource_type_counts(records),
         'clusterReferencedAssessments': cluster_reference_count(records, args.cluster_id),
         'pages': pages, 'candidates': candidates,
         'candidateSchemaPaths': sorted({p for row in candidates for p in schema_paths(row)}),
     }
-    stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    path = folder / f'{stamp}-{args.phase}-arg-assessments.json'
-    encoded = (json.dumps(payload, indent=2) + '\n').encode('utf-8')
-    with path.open('xb') as stream:
-        stream.write(encoded)
-    digest = hashlib.sha256(encoded).hexdigest()
-    with path.with_suffix('.sha256').open('x', encoding='utf-8') as stream:
-        stream.write(digest + '\n')
+    path, digest = write_private_capture(payload, f'{args.phase}-arg-assessments', folder)
     print(json.dumps({'file': path.name, 'phase': args.phase, 'pages': len(pages),
                       'assessments': len(records), 'candidatesRequireReview': len(candidates),
                       'clusterReferencedAssessments': payload['clusterReferencedAssessments'],
@@ -141,6 +135,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception as error:
-        print(f'{type(error).__name__}: {error}', file=sys.stderr)
+    except Exception:
+        print('ARG capture failed; no complete evidence claimed. Provider details omitted.', file=sys.stderr)
         sys.exit(1)
