@@ -1,13 +1,15 @@
 # Defender for Cloud: controller-scoped KSPM evidence lab
 
-Status as of October 9, 2026 at 17:49 UTC: two runs on AKS 1.35.8 in North Central US. The product result is observed; the article and evidence package are awaiting review and publication approval.
+Product observations recorded October 9, 2026 at 17:49 UTC: two runs on AKS 1.35.8 in North Central US. The observed result and sanitized evidence were reviewed for publication on October 12.
 
 - **Run 1 (October 7)** completed the Kubernetes demonstration. Live comparisons in `results/` document pod replacement, scaling, a template change, and replacement after hardening. No matching Defender finding was observed before the workload was changed and removed. Its roughly 65-minute lifetime did not establish a Defender baseline. Both resource groups were verified absent at about 21:37 UTC.
 - **Run 2 (October 7–9)** established two agentless findings before changing the workload. After the owning Deployment template was hardened, the trusted-registry finding named a verified post-rollout pod while preserving its exact assessment and assessed-resource identities. The read-only-root-filesystem finding disappeared from complete ARM and Resource Graph exports, returned 404 at its former address, and was no longer listed in the portal. No explicit Healthy or resolved root-filesystem record was returned. The isolated single-pod service test was inconclusive; no run-2 scaling or post-hardening replacement test was performed.
 
 **The observed result is removal of the root-filesystem finding, with fresh controller-attributed registry evidence.** The [October 9 result](results/run2-post-rollout-evidence.json) distinguishes that from an explicit Healthy transition. The [October 8 baseline/intervention record](results/run2-product-evidence.json) is historical; its pod names are now explicitly documented aliases in the shareable derivative, with original source hashes preserved.
 
-The original unfinished post and lab page were withdrawn. Their replacements remain unpublished drafts. Lab pushing and site publishing still require approval. The user authorized run-2 teardown on October 12; both the experiment resource group and its AKS-managed node group were verified absent at 14:49:51 UTC. Automatic checks remain paused. The cumulative allowance was USD 50, a planning allowance rather than an Azure-enforced billing cap.
+Companion article: [New Pods, Same Finding: Testing Defender's Kubernetes Controller Scope](https://nineliveszerotrust.com/blog/kubernetes-controller-security-defender-kspm/). Publication was approved on October 12. Both the experiment resource group and its AKS-managed node group were verified absent at 14:49:51 UTC that day. The cumulative allowance was USD 50, a planning allowance rather than an Azure-enforced billing cap.
+
+The result files preserve dated evidence and review snapshots. Pre-publication fields such as `publicationReady` and `publicationAuthorization` in the October 9 verification record describe that earlier review state; the later operational and cleanup records have their own timestamps. Those historical fields are retained for provenance.
 
 This package pairs a reproducible Kubernetes ownership experiment with collection tools for evaluating the October 5, 2026 change to workload-controller scope in Defender recommendations. Kubernetes behavior and Defender assessment behavior require separate evidence. Neither is an admission-control, image-CVE, or runtime-malware test.
 
